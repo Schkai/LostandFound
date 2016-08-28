@@ -23,6 +23,7 @@ public class ItemArrayAdapter  extends ArrayAdapter<LostItem> {private ArrayList
         this.items= items;
     }
 
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent){
 
