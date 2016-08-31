@@ -7,13 +7,26 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="lostandfound.mi.ur.de.lostandfound.MainActivity">
+    tools:context="lostandfound.mi.ur.de.lostandfound.MainActivity"
+    android:orientation="vertical"
+    android:weightSum="10">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/location_bar_color"
+        android:background="@color/colorPrimary"
+        android:text="@string/location"
+        android:id="@+id/textView"
+        android:layout_weight="0.4" />
 
 
     <TabHost
         android:id="@+id/tabHost"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="8"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true">
 
@@ -44,6 +57,7 @@
                         android:id="@+id/missing_list"
                          />
 
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -63,4 +77,31 @@
             </FrameLayout>
         </LinearLayout>
     </TabHost>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:weightSum="1">
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/new_entry"
+            android:id="@+id/new_entry_button"
+            android:layout_weight="0.50" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/change_location"
+            android:id="@+id/set_loc_button"
+            android:layout_weight="0.50"/>
+    </LinearLayout>
+
+
 </LinearLayout>

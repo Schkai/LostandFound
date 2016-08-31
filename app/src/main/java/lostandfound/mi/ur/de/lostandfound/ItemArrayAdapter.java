@@ -44,7 +44,7 @@ public class ItemArrayAdapter  extends ArrayAdapter<LostItem> {private ArrayList
 
         name.setText(item.getName());
         category.setText(item.getCategory());
-        location.setText(item.getLocation());
+        if(item.getLocation() != null){location.setText(item.getLocation().toString());}
         date.setText(item.getDate());
 
 
