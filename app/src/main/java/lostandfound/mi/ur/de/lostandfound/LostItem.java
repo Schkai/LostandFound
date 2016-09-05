@@ -21,6 +21,26 @@ public class LostItem {
 
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {return name;}
     public String getDate() {return date;}
     public String getCategory() {return category;}
