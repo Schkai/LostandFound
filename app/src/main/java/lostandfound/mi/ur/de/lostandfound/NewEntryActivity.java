@@ -8,14 +8,18 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -23,19 +27,34 @@ import java.util.Locale;
  */
 public class NewEntryActivity extends AppCompatActivity {
 
-
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
         initDateInputField();
+        //  initCategorySpinner();
         initPublishEntryButton();
         // back-button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
     }
+
+    /*private void initCategorySpinner() {
+        List<String> categories = new ArrayList<String>();
+        categories.add("Handy");
+        categories.add("Schlüssel");
+        categories.add("Bier");
+
+        //Create adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+
+    }
+    */
 
     private void initPublishEntryButton() {
         Button publishEntryButton = (Button)findViewById(R.id.publish_entry_button);
@@ -112,4 +131,6 @@ public class NewEntryActivity extends AppCompatActivity {
             tv.setText(date);
         }
     }
+
+
 }

@@ -161,18 +161,16 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
-            locationBar.setText(String.valueOf(mLastLocation.getLatitude()));
-            Log.d(TAG, "Daten gefunden");
-            locationBar.setText("funktioniert nicht");
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (mLastLocation != null) {
+                locationBar.setText(String.valueOf(mLastLocation.getLatitude()));
+                Log.d(TAG, "Daten gefunden");
+                locationBar.setText("Passt");
 
-
-        } else {
-            Toast.makeText(this, "no Location detected", Toast.LENGTH_LONG).show();
-            locationBar.setText("Geht nicht!");
+            } else {
+                Toast.makeText(this, "no Location detected", Toast.LENGTH_LONG).show();
+                locationBar.setText("Location nicht gefunden!");
+            }
         }
     }
 
