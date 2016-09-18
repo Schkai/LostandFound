@@ -3,10 +3,7 @@ package lostandfound.mi.ur.de.lostandfound;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,10 +16,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-
+import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 
@@ -49,21 +45,25 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        initBars();
         initLists();
         initTabs();
         initButtons();
 
-        locationBar = (TextView) findViewById(R.id.textView);
 
         //test
         LostItem i1 = new LostItem("test", "test", null, "test", 1);
         LostItem i2 = new LostItem("test2", "test", null, "test", 2);
         itemsMissing.add(i1);
         itemsFound.add(i2);
-
         buildGoogleApiClient();
 
+
+    }
+
+    private void initBars() {
+        getSupportActionBar().hide();
+        locationBar = (TextView) findViewById(R.id.textView);
 
     }
 
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 .addApi(LocationServices.API)
                 .build();
     }
-
 
 
     private void initButtons() {
@@ -149,10 +148,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     @Override
     public void onConnected(Bundle connectionHint) {
+
         // Provides a simple way of getting a device's location and is well suited for
         // applications that do not require a fine-grained location and that do not need location
         // updates. Gets the best and most recent location currently available, which may be null
         // in rare cases when a location is not available.
+
+
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -161,18 +163,21 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (mLastLocation != null) {
-                locationBar.setText(String.valueOf(mLastLocation.getLatitude()));
-                Log.d(TAG, "Daten gefunden");
-                locationBar.setText("Passt");
+            return;
+        }
 
-            } else {
-                Toast.makeText(this, "no Location detected", Toast.LENGTH_LONG).show();
-                locationBar.setText("Location nicht gefunden!");
-            }
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            locationBar.setText(String.valueOf(mLastLocation.getLatitude()));
+            Log.d(TAG, "Daten gefunden");
+
+
+        } else {
+            Toast.makeText(this, "no Location detected", Toast.LENGTH_LONG).show();
+            locationBar.setText("Location nicht gefunden!");
         }
     }
+
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
