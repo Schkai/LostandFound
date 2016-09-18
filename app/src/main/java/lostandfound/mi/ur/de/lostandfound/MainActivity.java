@@ -1,7 +1,10 @@
 package lostandfound.mi.ur.de.lostandfound;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -19,8 +22,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
 
@@ -31,13 +38,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private Button addEntryButton;
     private Button setLocButton;
 
-
+    public static final int MAP_REQUEST = 0;
     private static final String TAG = MainActivity.class.getSimpleName();
     protected TextView locationBar;
 
 
     private GoogleApiClient mGoogleApiClient;
-    protected Location mLastLocation;
+    protected static Location mLastLocation;
+    private LatLng theFindSpot;
 
 
     @Override
@@ -50,13 +58,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         initTabs();
         initButtons();
 
+        buildGoogleApiClient();
+
 
         //test
         LostItem i1 = new LostItem("test", "test", null, "test", 1);
         LostItem i2 = new LostItem("test2", "test", null, "test", 2);
         itemsMissing.add(i1);
         itemsFound.add(i2);
-        buildGoogleApiClient();
 
 
     }
@@ -89,6 +98,20 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 openNewEntryActivity();
             }
         });
+        setLocButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMapsActivity();
+            }
+        });
+
+    }
+
+    private void openMapsActivity() {
+
+            Intent i = new Intent(this, MapsActivity.class);
+            if (theFindSpot != null) {i.putExtra("last_loc", theFindSpot);}
+            startActivityForResult(i, 1);
 
     }
 
@@ -168,14 +191,32 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
-            locationBar.setText(String.valueOf(mLastLocation.getLatitude()));
             Log.d(TAG, "Daten gefunden");
 
+            if (theFindSpot == null) {
+                theFindSpot = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                updateLocationBar();
+            }
 
         } else {
             Toast.makeText(this, "no Location detected", Toast.LENGTH_LONG).show();
             locationBar.setText("Location nicht gefunden!");
         }
+    }
+
+    private void updateLocationBar() {
+        String locationName = "Gegenstände nahe ";
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(theFindSpot.latitude, theFindSpot.longitude, 1);
+            if (addresses != null && addresses.size() > 0) {
+                locationName += addresses.get(0).getAddressLine(0);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            //handle exception here
+        }
+        locationBar.setText(locationName);
     }
 
 
@@ -193,6 +234,21 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         // attempt to re-establish the connection.
         Log.d(TAG, "Connection suspended");
         mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (/*requestCode == MAP_REQUEST && */resultCode == Activity.RESULT_OK) {
+            double latitude = data.getDoubleExtra("latitude", 0);
+            double longitude = data.getDoubleExtra("longitude", 0);
+
+            theFindSpot = new LatLng(latitude, longitude);
+            updateLocationBar();
+        }
+
     }
 }
 

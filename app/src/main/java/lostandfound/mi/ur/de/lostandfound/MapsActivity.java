@@ -1,18 +1,22 @@
 package lostandfound.mi.ur.de.lostandfound;
 
-import android.support.v4.app.FragmentActivity;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Marker marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
     }
 
 
@@ -37,10 +43,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        LatLng lastLoc = getIntent().getExtras().getParcelable("last_loc");
+        // Add a marker and move the camera
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        if (lastLoc == null) {lastLoc= new LatLng(0,0);}
+            marker = mMap.addMarker(new MarkerOptions().position(lastLoc).title("Deine Position"));
+
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLoc));
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng point) {
+                MarkerOptions markerOpt = new MarkerOptions()
+                        .position(new LatLng(point.latitude, point.longitude))
+                        .title("New Marker");
+                marker.remove();
+                marker = mMap.addMarker(markerOpt);
+
+                setResult(Activity.RESULT_OK,
+                        new Intent().putExtra("latitude", marker.getPosition().latitude).putExtra("longitude", marker.getPosition().longitude));
+
+                finish();
+            }
+        });
     }
 }
