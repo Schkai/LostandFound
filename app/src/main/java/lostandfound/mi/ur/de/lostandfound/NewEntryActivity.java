@@ -28,6 +28,7 @@ import java.util.Locale;
 public class NewEntryActivity extends AppCompatActivity {
 
     private Spinner spinner;
+    private LostItem lostItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
