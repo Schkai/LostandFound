@@ -120,9 +120,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     private void openMapsActivity() {
 
-            Intent i = new Intent(this, MapsActivity.class);
-            if (theFindSpot != null) {i.putExtra("last_loc", theFindSpot);}
-            startActivityForResult(i, 1);
+        Intent i = new Intent(this, MapsActivity.class);
+        if (theFindSpot != null) {
+            i.putExtra("last_loc", theFindSpot);
+        } else {
+            LatLng defaultLatLng = new LatLng(0, 0);
+            i.putExtra("last_loc", defaultLatLng);
+        }
+        startActivityForResult(i, 1);
 
     }
 
@@ -210,8 +215,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             }
 
         } else {
-            Toast.makeText(this, "no Location detected", Toast.LENGTH_LONG).show();
-            locationBar.setText("Location nicht gefunden!");
+            if (theFindSpot == null) {
+                Toast.makeText(this, "no Location detected", Toast.LENGTH_LONG).show();
+                locationBar.setText("Location nicht gefunden!");
+            }
         }
     }
 
