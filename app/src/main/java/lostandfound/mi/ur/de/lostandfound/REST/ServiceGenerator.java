@@ -13,9 +13,7 @@ import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 
-/**
- * Created by Konstantin on 17.09.2016.
- */
+
 public class ServiceGenerator {
 
     public static final String API_BASE_URL = "https://pod-cyan-nemesis-7039.herokuapp.com";
@@ -24,29 +22,26 @@ public class ServiceGenerator {
             .setEndpoint(API_BASE_URL)
             .setClient(new OkClient(new OkHttpClient()));
 
-    public static <S> S createService(Class<S> serviceClass) {
-        return createService(serviceClass, null);
-    }
 
     public static <S> S createService(Class<S> serviceClass, String username, String password) {
-        // we shortened this part, because it’s covered in
-        // the previous post on basic authentication with Retrofit
-        return null;
-    }
+        if(username != null && password != null){
+         //concatenate username and password with colon for auth
+            String credentials = username + ":" + password;
+            //create Base64 encoded string
+            final String basic =
+                    "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
 
-    public static <S> S createService(Class<S> serviceClass, final AccessToken token) {
-        if (token != null) {
             builder.setRequestInterceptor(new RequestInterceptor() {
                 @Override
                 public void intercept(RequestFacade request) {
+                    request.addHeader("Authorization", basic);
                     request.addHeader("Accept", "application/json");
-                    request.addHeader("Authorization",
-                            token.getTokenType() + " " + token.getAccessToken());
                 }
             });
         }
-
         RestAdapter adapter = builder.build();
         return adapter.create(serviceClass);
     }
+
+
 }

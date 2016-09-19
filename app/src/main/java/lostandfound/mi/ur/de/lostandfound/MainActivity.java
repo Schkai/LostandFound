@@ -29,6 +29,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import lostandfound.mi.ur.de.lostandfound.REST.FoundItemItem;
+import lostandfound.mi.ur.de.lostandfound.REST.LoginService;
+import lostandfound.mi.ur.de.lostandfound.REST.ServiceGenerator;
+
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
 
     private ArrayList<LostItem> itemsMissing;
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         initButtons();
 
         buildGoogleApiClient();
-
+        //getFoundItems();
 
         //test
         LostItem i1 = new LostItem("test", "test", null, "test", 1);
@@ -69,6 +73,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
     }
+
+    private void getFoundItems() {
+        LoginService loginService =
+                ServiceGenerator.createService(LoginService.class, "admin", "lnf");
+        FoundItemItem foundItemItem = loginService.findItem();
+    }
+
 
     private void initBars() {
         getSupportActionBar().hide();
