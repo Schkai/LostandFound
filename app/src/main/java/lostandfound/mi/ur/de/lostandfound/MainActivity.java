@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         buildGoogleApiClient();
 
         //test
-        LostItem i1 = new LostItem("test", "test", "test", "test");
-        LostItem i2 = new LostItem("test2", "test", "test", "test");
+        LostItem i1 = new LostItem("test", "test",0,0,"test","test", "test", "test");
+        LostItem i2 = new LostItem("test2", "test",0,0,"test","test", "test", "test");
         itemsMissing.add(i1);
         itemsFound.add(i2);
 

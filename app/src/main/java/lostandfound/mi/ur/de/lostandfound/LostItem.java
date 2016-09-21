@@ -1,23 +1,28 @@
 package lostandfound.mi.ur.de.lostandfound;
 
-import android.location.Location;
-
 /**
  * Created by Alexander on 28.08.2016.
  */
 public class LostItem {
     private String name;
     private String date;
-    private Location location;
+    private double longitude;
+    private double latitude;
     private String category;
     private int id;
     private String description;
+    private String town;
+    private String contact;
 
-    public LostItem(String name, String date,String category, String description ){
+    public LostItem(String name, String date, double longitude, double latitude, String category, String description, String town, String contact){
         this.name=name;
         this.date=date;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.category=category;
         this.description = description;
+        this.town = town;
+        this.contact = contact;
     }
 
 
@@ -32,10 +37,6 @@ public class LostItem {
         this.date = date;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public void setCategory(String category) {
         this.category = category;
     }
@@ -46,8 +47,11 @@ public class LostItem {
 
     public String getName() {return name;}
     public String getDate() {return date;}
+    public double getLongitude() {return longitude;}
+    public double getLatitude() {return longitude;}
     public String getCategory() {return category;}
-    public Location getLocation(){return location;}
+    public String getContact() {return contact;}
+    public String getTown() {return town;}
     public int getId() {return id;}
 
 
