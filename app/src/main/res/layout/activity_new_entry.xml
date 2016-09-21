@@ -13,27 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/input_contact"
-        android:id="@+id/input_contact_text_label"
-        android:elegantTextHeight="false"
-        android:textStyle="bold"
-        android:textAllCaps="true" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/input_date"
-        android:id="@+id/input_contact_text_"
-        android:elegantTextHeight="false"
-        android:textStyle="bold"
-        android:textAllCaps="true" />
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/input_item_name"
         android:id="@+id/input_name_text"
         android:elegantTextHeight="false"
@@ -46,8 +25,9 @@
         android:ems="10"
         android:id="@+id/input_name_edit"
         android:hint="@string/input_item_name"
-        android:singleLine="true"
+        android:maxLines="1"
         android:layout_marginBottom="16dp"
+        android:imeOptions="actionDone"
         />
 
     <EditText
@@ -56,7 +36,18 @@
         android:ems="10"
         android:id="@+id/input_content_edit"
         android:hint="@string/input_item_content"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="5dp"
+        android:imeOptions="actionDone"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/input_item_description"
+        android:id="@+id/input_contact_text_"
+        android:elegantTextHeight="false"
+        android:textStyle="bold"
+        android:textAllCaps="true" />
 
     <EditText
         android:layout_width="match_parent"
@@ -64,7 +55,8 @@
         android:ems="10"
         android:id="@+id/input_description_edit"
         android:hint="@string/input_item_description"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="5dp"
+        android:imeOptions="actionDone"/>
 
 
     <TextView
@@ -85,10 +77,29 @@
         android:hint="@string/input_date"
         android:inputType="date"
         android:id="@+id/input_date_edit"
-
-        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:maxLines="1"
         android:layout_marginBottom="16dp"
          />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/input_contact"
+        android:id="@+id/input_contact_text_label"
+        android:elegantTextHeight="false"
+        android:textStyle="bold"
+        android:textAllCaps="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/input_contact_edit"
+        android:hint="How do we contact you?"
+        android:inputType="text"
+        android:imeOptions="actionDone"/>
 
     <Button
         android:layout_width="match_parent"

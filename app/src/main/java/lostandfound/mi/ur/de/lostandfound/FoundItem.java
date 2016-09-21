@@ -1,9 +1,11 @@
 package lostandfound.mi.ur.de.lostandfound;
 
 /**
- * Created by Alexander on 28.08.2016.
+ * Created by Konstantin on 21.09.2016.
  */
-public class LostItem {
+
+public class FoundItem {
+
     private String name;
     private String date;
     private double longitude;
@@ -14,7 +16,7 @@ public class LostItem {
     private String town;
     private String contact;
 
-    public LostItem(String name, String date, double longitude, double latitude, String category, String description, String town, String contact){
+    public FoundItem(String name, String date, double longitude, double latitude, String category, String description, String town, String contact){
         this.name=name;
         this.date=date;
         this.longitude = longitude;
@@ -25,7 +27,7 @@ public class LostItem {
         this.contact = contact;
     }
 
-    public LostItem(){
+    public FoundItem(){
     }
 
     public void setLongitude(double longitude) {
@@ -75,3 +77,4 @@ public class LostItem {
 
 
 }
+

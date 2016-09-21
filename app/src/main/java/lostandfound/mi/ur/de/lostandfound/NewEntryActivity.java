@@ -84,10 +84,14 @@ public class NewEntryActivity extends AppCompatActivity {
                 EditText dateEdit = (EditText) findViewById(R.id.input_date_edit);
                 EditText contentEdit = (EditText) findViewById(R.id.input_content_edit);
                 EditText descEdit = (EditText) findViewById(R.id.input_description_edit);
+                EditText contactEdit = (EditText) findViewById(R.id.input_contact_edit);
+
                 String name = nameEdit.getText().toString();
                 String date = dateEdit.getText().toString();
                 String content = contentEdit.getText().toString();
                 String description = descEdit.getText().toString();
+                String contact = contactEdit.getText().toString();
+
 
                 Firebase newItem = ref.child("LostItem");
                 LostItem item = new LostItem(name, date,0,0, content, description, description, description);
@@ -101,15 +105,19 @@ public class NewEntryActivity extends AppCompatActivity {
 
                 item.setName(name);
                 item.setDate(date);
+                item.setLongitude(0); //0 for now, should be intent extra
+                item.setLongitude(0); //same applies here
                 item.setCategory(content);
                 item.setDescription(description);
+                item.setTown("Regensburg"); //Should be converted from gps and inserted
+                item.setContact(contact);
                 newItem.push().setValue(item);
 
 
                 //SAVE
 
-                    Toast.makeText(NewEntryActivity.this, "Worked", Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(NewEntryActivity.this, "Item saved!", Toast.LENGTH_LONG).show();
+                finish();
 
 
             }

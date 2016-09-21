@@ -25,14 +25,15 @@ public class FirebaseHelper {
     }
 
     //SAVE
-    public boolean save(lostandfound.mi.ur.de.lostandfound.LostItem lostItem) {
+    public boolean save(LostItem lostItem) {
         if (lostItem == null) {
             saved = false;
         } else {
             try {
-                db.child("Lostitem").push().setValue(lostItem);
+                db.child("LostItem").push().setValue(lostItem);
                 saved = true;
             } catch (DatabaseException e) {
+                e.printStackTrace();
                 saved = false;
             }
         }

@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -39,6 +41,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
 
     private ArrayList<LostItem> itemsMissing;
+    private ArrayAdapter<String> lostAdapter;
     private ArrayList<LostItem> itemsFound;
     private ItemArrayAdapter adapter;
     private TabHost tabHost;
@@ -57,11 +60,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
 
-    //Firebase
-    private TextView mFireBaseTestTextview;
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mconditionRef = mRootRef.child("condition");
-   // Firebase mRef = new Firebase("https://lostandfound-d91c9.firebaseio.com/lostItem");
+    //FIREBASE -------------
+    private ListView lostListView;
 
 
 
@@ -71,29 +71,44 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Firebase.setAndroidContext(this);
+
+        initLists();
+        getFireBaseLostData();
+
 
 
         initBars();
-        initLists();
         initTabs();
         initButtons();
-        initViews();
 
-        mFireBaseTestTextview = (TextView)findViewById(R.id.firebaseTest);
 
         buildGoogleApiClient();
 
         //test
         LostItem i1 = new LostItem("test", "test",0,0,"test","test", "test", "test");
         LostItem i2 = new LostItem("test2", "test",0,0,"test","test", "test", "test");
-        itemsMissing.add(i1);
+   //     itemsMissing.add(i1);
         itemsFound.add(i2);
 
 
     }
 
+    private void getFireBaseLostData() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference lostRef = ref.child("LostItem");
+
+
+        FirebaseListAdapter<LostItem> adapter = new FirebaseListAdapter<LostItem>(this, LostItem.class, android.R.layout.two_line_list_item, lostRef) {
+            @Override
+            protected void populateView(View v, LostItem model, int position) {
+                ((TextView)v.findViewById(android.R.id.text1)).setText(model.getName());
+                ((TextView)v.findViewById(android.R.id.text2)).setText(model.getDescription());
+            }
+        };
+        lostListView.setAdapter(adapter);
+
+    }
 
 
     private void initBars() {
@@ -169,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
     private void initViews(){
-        mRecyclerView = (RecyclerView) findViewById(R.id.lostView);
+     //   mRecyclerView = (RecyclerView) findViewById(R.id.lostView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
     }
@@ -177,12 +192,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
     private void initLists() {
-       // ListView missingList = (ListView) findViewById(R.id.missing_list);
+      //  ListView missingList = (ListView) findViewById(R.id.lost_list);
+        lostListView = (ListView)findViewById(R.id.lost_list);
+
         ListView foundList = (ListView) findViewById(R.id.found_list);
 
-        itemsMissing = new ArrayList<LostItem>();
-        adapter = new ItemArrayAdapter(MainActivity.this, itemsMissing);
-        //missingList.setAdapter(adapter);
+
+      //  itemsMissing = new ArrayList<LostItem>();
+       // adapter = new ItemArrayAdapter(MainActivity.this, itemsMissing);
 
 
         itemsFound = new ArrayList<LostItem>();
