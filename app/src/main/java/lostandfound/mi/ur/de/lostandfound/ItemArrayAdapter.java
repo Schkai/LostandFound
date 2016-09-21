@@ -38,13 +38,14 @@ public class ItemArrayAdapter  extends ArrayAdapter<LostItem> {private ArrayList
 
         TextView name = (TextView) v.findViewById(R.id.name);
         TextView category = (TextView) v.findViewById(R.id.category);
-        TextView location = (TextView) v.findViewById(R.id.location);
+        //TextView location = (TextView) v.findViewById(R.id.location);
         TextView date = (TextView) v.findViewById(R.id.date);
 
 
         name.setText(item.getName());
         category.setText(item.getCategory());
-        if(item.getLocation() != null){location.setText(item.getLocation().toString());}
+
+        //location.setText(item.getLocation().toString());
         date.setText(item.getDate());
 
 
