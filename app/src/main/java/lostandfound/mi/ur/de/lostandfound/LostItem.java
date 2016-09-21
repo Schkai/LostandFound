@@ -5,7 +5,7 @@ import android.location.Location;
 /**
  * Created by Alexander on 28.08.2016.
  */
-public class Lostitem {
+public class LostItem {
     private String name;
     private String date;
     private Location location;
@@ -13,7 +13,7 @@ public class Lostitem {
     private int id;
     private String description;
 
-    public Lostitem(String name, String date,String category, String description ){
+    public LostItem(String name, String date,String category, String description ){
         this.name=name;
         this.date=date;
         this.category=category;

@@ -38,8 +38,8 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
 
-    private ArrayList<Lostitem> itemsMissing;
-    private ArrayList<Lostitem> itemsFound;
+    private ArrayList<LostItem> itemsMissing;
+    private ArrayList<LostItem> itemsFound;
     private ItemArrayAdapter adapter;
     private TabHost tabHost;
     private Button addEntryButton;
@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         buildGoogleApiClient();
 
         //test
-        Lostitem i1 = new Lostitem("test", "test", "test", "test");
-        Lostitem i2 = new Lostitem("test2", "test", "test", "test");
+        LostItem i1 = new LostItem("test", "test", "test", "test");
+        LostItem i2 = new LostItem("test2", "test", "test", "test");
         itemsMissing.add(i1);
         itemsFound.add(i2);
 
@@ -180,12 +180,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
        // ListView missingList = (ListView) findViewById(R.id.missing_list);
         ListView foundList = (ListView) findViewById(R.id.found_list);
 
-        itemsMissing = new ArrayList<Lostitem>();
+        itemsMissing = new ArrayList<LostItem>();
         adapter = new ItemArrayAdapter(MainActivity.this, itemsMissing);
         //missingList.setAdapter(adapter);
 
 
-        itemsFound = new ArrayList<Lostitem>();
+        itemsFound = new ArrayList<LostItem>();
         adapter = new ItemArrayAdapter(MainActivity.this, itemsFound);
         foundList.setAdapter(adapter);
     }
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
     private void updateLocationBar() {
-        String locationName = "Gegenstände nahe ";
+        String locationName = "items near ";
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(theFindSpot.latitude, theFindSpot.longitude, 1);

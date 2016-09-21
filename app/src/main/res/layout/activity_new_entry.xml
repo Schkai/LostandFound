@@ -13,16 +13,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/input_category"
-        android:id="@+id/input_category_text"
+        android:text="@string/input_contact"
+        android:id="@+id/input_contact_text_label"
         android:elegantTextHeight="false"
         android:textStyle="bold"
         android:textAllCaps="true" />
 
-    <Spinner
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/input_date"
+        android:id="@+id/input_contact_text_"
+        android:elegantTextHeight="false"
+        android:textStyle="bold"
+        android:textAllCaps="true" />
 
 
     <TextView

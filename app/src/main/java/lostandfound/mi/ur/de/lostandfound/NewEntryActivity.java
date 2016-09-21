@@ -26,7 +26,6 @@ import java.util.Locale;
 
 import lostandfound.mi.ur.de.lostandfound.FireBase.FirebaseHelper;
 import lostandfound.mi.ur.de.lostandfound.FireBase.MyAdapter;
-import lostandfound.mi.ur.de.lostandfound.Model.LostItem;
 
 /**
  * Created by Alexander on 31.08.2016.
@@ -34,7 +33,7 @@ import lostandfound.mi.ur.de.lostandfound.Model.LostItem;
 public class NewEntryActivity extends AppCompatActivity {
 
     private Spinner spinner;
-    private Lostitem lostitem;
+    private LostItem lostitem;
 
 
     DatabaseReference db;
@@ -91,14 +90,14 @@ public class NewEntryActivity extends AppCompatActivity {
                 String description = descEdit.getText().toString();
 
                 Firebase newItem = ref.child("LostItem");
-                Lostitem item = new Lostitem(name, date, content, description);
+                LostItem item = new LostItem(name, date, content, description);
 
 
                 //SET DATA
-                LostItem l = new LostItem();
+               /* LostItem l = new LostItem();
                 l.setName(name);
                 l.setContent(content);
-                l.setDescription(description);
+                l.setDescription(description);*/
 
                 item.setName(name);
                 item.setDate(date);

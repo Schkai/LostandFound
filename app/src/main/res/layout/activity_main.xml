@@ -17,7 +17,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/location_bar_color"
         android:background="@color/colorPrimary"
-        android:text="@string/location"
+        android:text="@string/location_default_location"
         android:id="@+id/textView"
         android:layout_weight="0.4" />
 
@@ -27,8 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="8"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+       >
 
         <LinearLayout
             android:layout_width="match_parent"

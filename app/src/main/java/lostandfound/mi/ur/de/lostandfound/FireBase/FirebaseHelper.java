@@ -9,7 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
-import lostandfound.mi.ur.de.lostandfound.Model.LostItem;
+import lostandfound.mi.ur.de.lostandfound.LostItem;
 
 /**
  * Created by Konstantin on 21.09.2016.
@@ -25,7 +25,7 @@ public class FirebaseHelper {
     }
 
     //SAVE
-    public boolean save(LostItem lostItem) {
+    public boolean save(lostandfound.mi.ur.de.lostandfound.LostItem lostItem) {
         if (lostItem == null) {
             saved = false;
         } else {

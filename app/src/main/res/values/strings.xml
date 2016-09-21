@@ -16,6 +16,7 @@
     <string name="label_geolocator">Geocoding</string>
     <string name="location_default_text">45.00</string>
     <string name="location_default_location">No Address Available</string>
+    <string name="input_contact">Contact</string>
 
 
 </resources>
