@@ -17,6 +17,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
+
+    }
 }
 
 dependencies {
@@ -25,14 +32,11 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
 
     compile 'com.google.android.gms:play-services:9.4.0'
     compile 'de.greenrobot:eventbus:2.4.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.path:android-priority-jobqueue:1.1.2'
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+
 
     compile 'com.doomonafireball.betterpickers:library:1.6.0'
     compile 'junit:junit:4.12'

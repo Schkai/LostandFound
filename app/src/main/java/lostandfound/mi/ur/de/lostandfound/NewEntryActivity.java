@@ -40,7 +40,7 @@ public class NewEntryActivity extends AppCompatActivity {
     DatabaseReference db;
     FirebaseHelper helper;
     MyAdapter adapter;
-    Firebase ref = new Firebase("https://lostandfound-d91c9.firebaseio.com/LostItem");
+    Firebase ref = new Firebase("https://lostandfound-d91c9.firebaseio.com");
 
 
 
@@ -92,7 +92,7 @@ public class NewEntryActivity extends AppCompatActivity {
 
                 Firebase newItem = ref.child("LostItem");
                 Lostitem item = new Lostitem(name, date, content, description);
-                newItem.setValue(item);
+
 
                 //SET DATA
                 LostItem l = new LostItem();
@@ -100,21 +100,23 @@ public class NewEntryActivity extends AppCompatActivity {
                 l.setContent(content);
                 l.setDescription(description);
 
+                item.setName(name);
+                item.setDate(date);
+                item.setCategory(content);
+                item.setDescription(description);
+                newItem.push().setValue(item);
+
+
                 //SAVE
 
-                helper.save(l);
-                if(helper.save(l)){
                     Toast.makeText(NewEntryActivity.this, "Worked", Toast.LENGTH_LONG).show();
-                }
+
 
 
             }
         });
     }
 
-    private void addNewEntry() {
-        // neues item generieren in die DB fotzen und Activity zerhauen
-    }
 
     private void initDateInputField() {
 
