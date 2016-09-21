@@ -5,21 +5,24 @@ import android.location.Location;
 /**
  * Created by Alexander on 28.08.2016.
  */
-public class LostItem {
+public class Lostitem {
     private String name;
     private String date;
     private Location location;
     private String category;
     private int id;
+    private String description;
 
-    public LostItem(String name, String date, Location location, String category, int id){
+    public Lostitem(String name, String date,String category, String description ){
         this.name=name;
         this.date=date;
         this.category=category;
-        this.location=location;
-        this.id=id;
-
+        this.description = description;
     }
+
+
+    public void setDescription(String description){this.description = description;}
+    public String getDescription(){return description;}
 
     public void setName(String name) {
         this.name = name;

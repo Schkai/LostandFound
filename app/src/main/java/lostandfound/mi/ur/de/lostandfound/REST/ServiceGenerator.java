@@ -2,46 +2,57 @@ package lostandfound.mi.ur.de.lostandfound.REST;
 
 import android.util.Base64;
 
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.client.OkClient;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class ServiceGenerator {
 
     public static final String API_BASE_URL = "https://pod-cyan-nemesis-7039.herokuapp.com";
 
-    private static RestAdapter.Builder builder = new RestAdapter.Builder()
-            .setEndpoint(API_BASE_URL)
-            .setClient(new OkClient(new OkHttpClient()));
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
+    private static Retrofit.Builder builder =
+            new Retrofit.Builder()
+                    .baseUrl(API_BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create());
+
+    public static <S> S createService(Class<S> serviceClass) {
+        return createService(serviceClass, null, null);
+    }
 
     public static <S> S createService(Class<S> serviceClass, String username, String password) {
-        if(username != null && password != null){
-         //concatenate username and password with colon for auth
+        if (username != null && password != null) {
             String credentials = username + ":" + password;
-            //create Base64 encoded string
             final String basic =
                     "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
 
-            builder.setRequestInterceptor(new RequestInterceptor() {
+            httpClient.addInterceptor(new Interceptor() {
                 @Override
-                public void intercept(RequestFacade request) {
-                    request.addHeader("Authorization", basic);
-                    request.addHeader("Accept", "application/json");
+                public Response intercept(Interceptor.Chain chain) throws IOException {
+                    Request original = chain.request();
+
+                    Request.Builder requestBuilder = original.newBuilder()
+                            .header("Authorization", basic)
+                            .header("Accept", "application/json")
+                            .method(original.method(), original.body());
+
+                    Request request = requestBuilder.build();
+                    return chain.proceed(request);
                 }
             });
         }
-        RestAdapter adapter = builder.build();
-        return adapter.create(serviceClass);
+
+        OkHttpClient client = httpClient.build();
+        Retrofit retrofit = builder.client(client).build();
+        return retrofit.create(serviceClass);
     }
-
-
 }

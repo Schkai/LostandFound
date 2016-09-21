@@ -1,5 +1,5 @@
 package lostandfound.mi.ur.de.lostandfound.helpers;
-
+/*
 import android.text.TextUtils;
 import android.util.Base64;
 
@@ -23,15 +23,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.RequestInterceptor.RequestFacade;
-import retrofit.RestAdapter.Builder;
-import retrofit.RestAdapter.LogLevel;
-import retrofit.client.Client;
-import retrofit.client.OkClient;
-import retrofit.converter.Converter;
-import retrofit.converter.GsonConverter;
+import retrofit2.RequestInterceptor;
+import retrofit2.RestAdapter;
+import retrofit2.RequestInterceptor.RequestFacade;
+import retrofit2.RestAdapter.Builder;
+import retrofit2.RestAdapter.LogLevel;
+import retrofit2.client.Client;
+import retrofit2.client.OkClient;
+import retrofit2.converter.Converter;
+import retrofit2.converter.GsonConverter;
 
 public abstract class RestService<R> {
     private final Class<R> mClass;
@@ -194,3 +194,4 @@ public abstract class RestService<R> {
 
     public abstract URL getImageUrl(String var1);
 }
+*/

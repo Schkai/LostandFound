@@ -9,6 +9,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,20 +25,20 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import lostandfound.mi.ur.de.lostandfound.REST.FoundItemItem;
-import lostandfound.mi.ur.de.lostandfound.REST.LoginService;
-import lostandfound.mi.ur.de.lostandfound.REST.ServiceGenerator;
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
 
-    private ArrayList<LostItem> itemsMissing;
-    private ArrayList<LostItem> itemsFound;
+    private ArrayList<Lostitem> itemsMissing;
+    private ArrayList<Lostitem> itemsFound;
     private ItemArrayAdapter adapter;
     private TabHost tabHost;
     private Button addEntryButton;
@@ -51,6 +53,18 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     protected static Location mLastLocation;
     private LatLng theFindSpot;
 
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLinearLayoutManager;
+
+    //Firebase
+    private TextView mFireBaseTestTextview;
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference mconditionRef = mRootRef.child("condition");
+   // Firebase mRef = new Firebase("https://lostandfound-d91c9.firebaseio.com/lostItem");
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,24 +75,21 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         initLists();
         initTabs();
         initButtons();
+        initViews();
+
+        mFireBaseTestTextview = (TextView)findViewById(R.id.firebaseTest);
 
         buildGoogleApiClient();
-        //getFoundItems();
 
         //test
-        LostItem i1 = new LostItem("test", "test", null, "test", 1);
-        LostItem i2 = new LostItem("test2", "test", null, "test", 2);
+        Lostitem i1 = new Lostitem("test", "test", "test", "test");
+        Lostitem i2 = new Lostitem("test2", "test", "test", "test");
         itemsMissing.add(i1);
         itemsFound.add(i2);
 
 
     }
 
-    private void getFoundItems() {
-        LoginService loginService =
-                ServiceGenerator.createService(LoginService.class, "admin", "lnf");
-        FoundItemItem foundItemItem = loginService.findItem();
-    }
 
 
     private void initBars() {
@@ -153,16 +164,24 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         tabHost.addTab(tabSpec);
     }
 
+    private void initViews(){
+        mRecyclerView = (RecyclerView) findViewById(R.id.lostView);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+    }
+
+
+
     private void initLists() {
-        ListView missingList = (ListView) findViewById(R.id.missing_list);
+       // ListView missingList = (ListView) findViewById(R.id.missing_list);
         ListView foundList = (ListView) findViewById(R.id.found_list);
 
-        itemsMissing = new ArrayList<LostItem>();
+        itemsMissing = new ArrayList<Lostitem>();
         adapter = new ItemArrayAdapter(MainActivity.this, itemsMissing);
-        missingList.setAdapter(adapter);
+        //missingList.setAdapter(adapter);
 
 
-        itemsFound = new ArrayList<LostItem>();
+        itemsFound = new ArrayList<Lostitem>();
         adapter = new ItemArrayAdapter(MainActivity.this, itemsFound);
         foundList.setAdapter(adapter);
     }

@@ -8,19 +8,25 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
+
+import lostandfound.mi.ur.de.lostandfound.FireBase.FirebaseHelper;
+import lostandfound.mi.ur.de.lostandfound.FireBase.MyAdapter;
+import lostandfound.mi.ur.de.lostandfound.Model.LostItem;
 
 /**
  * Created by Alexander on 31.08.2016.
@@ -28,7 +34,15 @@ import java.util.Locale;
 public class NewEntryActivity extends AppCompatActivity {
 
     private Spinner spinner;
-    private LostItem lostItem;
+    private Lostitem lostitem;
+
+
+    DatabaseReference db;
+    FirebaseHelper helper;
+    MyAdapter adapter;
+    Firebase ref = new Firebase("https://lostandfound-d91c9.firebaseio.com/LostItem");
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +53,10 @@ public class NewEntryActivity extends AppCompatActivity {
         initPublishEntryButton();
         // back-button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //initialize fb
+        db = FirebaseDatabase.getInstance().getReference();
+        helper = new FirebaseHelper(db);
+        //
 
 
     }
@@ -62,13 +80,33 @@ public class NewEntryActivity extends AppCompatActivity {
         publishEntryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //GET DATA
                 EditText nameEdit = (EditText) findViewById(R.id.input_name_edit);
                 EditText dateEdit = (EditText) findViewById(R.id.input_date_edit);
+                EditText contentEdit = (EditText) findViewById(R.id.input_content_edit);
+                EditText descEdit = (EditText) findViewById(R.id.input_description_edit);
                 String name = nameEdit.getText().toString();
                 String date = dateEdit.getText().toString();
-                if (!name.equals("")) {
-                    addNewEntry();
+                String content = contentEdit.getText().toString();
+                String description = descEdit.getText().toString();
+
+                Firebase newItem = ref.child("LostItem");
+                Lostitem item = new Lostitem(name, date, content, description);
+                newItem.setValue(item);
+
+                //SET DATA
+                LostItem l = new LostItem();
+                l.setName(name);
+                l.setContent(content);
+                l.setDescription(description);
+
+                //SAVE
+
+                helper.save(l);
+                if(helper.save(l)){
+                    Toast.makeText(NewEntryActivity.this, "Worked", Toast.LENGTH_LONG).show();
                 }
+
 
             }
         });

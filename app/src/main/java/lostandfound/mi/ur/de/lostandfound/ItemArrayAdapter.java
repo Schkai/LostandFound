@@ -12,12 +12,12 @@ import java.util.ArrayList;
 /**
  * Created by Alexander on 28.08.2016.
  */
-public class ItemArrayAdapter  extends ArrayAdapter<LostItem> {private ArrayList<LostItem> items;
+public class ItemArrayAdapter  extends ArrayAdapter<Lostitem> {private ArrayList<Lostitem> items;
     private Context context;
-    private LostItem item;
+    private Lostitem item;
 
 
-    public ItemArrayAdapter(Context context, ArrayList<LostItem> items) {
+    public ItemArrayAdapter(Context context, ArrayList<Lostitem> items) {
         super(context, R.layout.item_view, items);
         this.context= context;
         this.items= items;

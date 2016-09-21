@@ -1,5 +1,5 @@
 package lostandfound.mi.ur.de.lostandfound.REST;
-
+/*
 import android.content.Context;
 
 import java.net.URL;
@@ -42,3 +42,4 @@ public class FoundItemService extends RestService {
     }
 
 }
+*/

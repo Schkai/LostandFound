@@ -51,11 +51,18 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <ListView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="FirebaseTest"
+                        android:id="@+id/firebaseTest"/>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/lostView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/missing_list"
-                         />
+                        android:scrollbars="vertical"
+                        />
 
 
                 </LinearLayout>
@@ -85,6 +92,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:weightSum="1">
+
+
 
 
         <Button
