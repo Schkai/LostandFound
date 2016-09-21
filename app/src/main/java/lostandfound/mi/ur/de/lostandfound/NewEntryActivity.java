@@ -90,7 +90,7 @@ public class NewEntryActivity extends AppCompatActivity {
                 String description = descEdit.getText().toString();
 
                 Firebase newItem = ref.child("LostItem");
-                LostItem item = new LostItem(name, date, content, description);
+                LostItem item = new LostItem(name, date,0,0, content, description, description, description);
 
 
                 //SET DATA
