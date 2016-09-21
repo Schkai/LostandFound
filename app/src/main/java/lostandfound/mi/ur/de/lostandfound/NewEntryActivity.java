@@ -3,11 +3,13 @@ package lostandfound.mi.ur.de.lostandfound;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -20,8 +22,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 import lostandfound.mi.ur.de.lostandfound.FireBase.FirebaseHelper;
@@ -33,12 +37,11 @@ import lostandfound.mi.ur.de.lostandfound.FireBase.MyAdapter;
 public class NewEntryActivity extends AppCompatActivity {
 
     private Spinner spinner;
-    private LostItem lostitem;
+    private double latitude;
+    private double longitude;
 
 
     DatabaseReference db;
-    FirebaseHelper helper;
-    MyAdapter adapter;
     Firebase ref = new Firebase("https://lostandfound-d91c9.firebaseio.com");
 
 
@@ -47,81 +50,143 @@ public class NewEntryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
+
         initDateInputField();
+        initSpinner();
         //  initCategorySpinner();
         initPublishEntryButton();
         // back-button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //initialize fb
         db = FirebaseDatabase.getInstance().getReference();
-        helper = new FirebaseHelper(db);
-        //
-
-
     }
 
-    /*private void initCategorySpinner() {
-        List<String> categories = new ArrayList<String>();
-        categories.add("Handy");
-        categories.add("Schlüssel");
-        categories.add("Bier");
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1){
+            Bundle extras = data.getExtras();
+            latitude = extras.getDouble("latitude");
+            longitude = extras.getDouble("longitude");
+        }
+    }
 
-        //Create adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+    private void initSpinner(){
+        spinner = (Spinner) findViewById(R.id.post_option_spinner);
+
+        List<String> list = new ArrayList<String>();
+        list.add("Lost");
+        list.add("Found");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
+        //Spinner item selection Listener
+        addListenerOnSpinnerItemSelected();
+
+
+
     }
-    */
+
+    private void addListenerOnSpinnerItemSelected() {
+        spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+    }
+
 
     private void initPublishEntryButton() {
         Button publishEntryButton = (Button)findViewById(R.id.publish_entry_button);
         publishEntryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //GET DATA
-                EditText nameEdit = (EditText) findViewById(R.id.input_name_edit);
-                EditText dateEdit = (EditText) findViewById(R.id.input_date_edit);
-                EditText contentEdit = (EditText) findViewById(R.id.input_content_edit);
-                EditText descEdit = (EditText) findViewById(R.id.input_description_edit);
-                EditText contactEdit = (EditText) findViewById(R.id.input_contact_edit);
 
-                String name = nameEdit.getText().toString();
-                String date = dateEdit.getText().toString();
-                String content = contentEdit.getText().toString();
-                String description = descEdit.getText().toString();
-                String contact = contactEdit.getText().toString();
+                if(String.valueOf(spinner.getSelectedItem()) == "Lost") {
 
+                    pushNewLostDataToServer();
 
-                Firebase newItem = ref.child("LostItem");
-                LostItem item = new LostItem(name, date,0,0, content, description, description, description);
+                } else {
 
+                    pushNewFoundDataToServer();
 
-                //SET DATA
-               /* LostItem l = new LostItem();
-                l.setName(name);
-                l.setContent(content);
-                l.setDescription(description);*/
-
-                item.setName(name);
-                item.setDate(date);
-                item.setLongitude(0); //0 for now, should be intent extra
-                item.setLongitude(0); //same applies here
-                item.setCategory(content);
-                item.setDescription(description);
-                item.setTown("Regensburg"); //Should be converted from gps and inserted
-                item.setContact(contact);
-                newItem.push().setValue(item);
-
-
-                //SAVE
-
-                    Toast.makeText(NewEntryActivity.this, "Item saved!", Toast.LENGTH_LONG).show();
-                finish();
-
+                }
 
             }
         });
+    }
+
+    private void pushNewFoundDataToServer() {
+
+        //GET DATA
+        EditText nameEdit = (EditText) findViewById(R.id.input_name_edit);
+        EditText dateEdit = (EditText) findViewById(R.id.input_date_edit);
+        EditText contentEdit = (EditText) findViewById(R.id.input_content_edit);
+        EditText descEdit = (EditText) findViewById(R.id.input_description_edit);
+        EditText contactEdit = (EditText) findViewById(R.id.input_contact_edit);
+
+        String name = nameEdit.getText().toString();
+        String date = dateEdit.getText().toString();
+       // Double latitude = getIntent().getDoubleExtra("latitude", 0);
+      //  Double longitude = getIntent().getDoubleExtra("longitude", 0);
+        String content = contentEdit.getText().toString();
+        String description = descEdit.getText().toString();
+        String contact = contactEdit.getText().toString();
+
+
+        Firebase newItem = ref.child("FoundItem");
+        LostItem item = new LostItem(name, date, 0, 0, content, description, description, description);
+
+
+        item.setName(name);
+        item.setDate(date);
+        item.setLatitude(longitude); //0 for now, should be intent extra
+        item.setLongitude(latitude); //same applies here
+        item.setCategory(content);
+        item.setDescription(description);
+        item.setTown("Regensburg"); //Should be converted from gps and inserted
+        item.setContact(contact);
+        newItem.push().setValue(item);
+
+        //SAVE
+        Toast.makeText(NewEntryActivity.this, "Item saved!", Toast.LENGTH_LONG).show();
+        finish();
+    }
+
+    private void pushNewLostDataToServer() {
+
+        //GET DATA
+        EditText nameEdit = (EditText) findViewById(R.id.input_name_edit);
+        EditText dateEdit = (EditText) findViewById(R.id.input_date_edit);
+        //Double latitude = getIntent().getDoubleExtra("latitude", 0);
+        //Double longitude = getIntent().getDoubleExtra("longitude", 0);
+        EditText contentEdit = (EditText) findViewById(R.id.input_content_edit);
+        EditText descEdit = (EditText) findViewById(R.id.input_description_edit);
+        EditText contactEdit = (EditText) findViewById(R.id.input_contact_edit);
+
+        String name = nameEdit.getText().toString();
+        String date = dateEdit.getText().toString();
+        String content = contentEdit.getText().toString();
+        String description = descEdit.getText().toString();
+        String contact = contactEdit.getText().toString();
+
+
+        Firebase newItem = ref.child("LostItem");
+        LostItem item = new LostItem(name, date, 0, 0, content, description, description, description);
+
+        item.setName(name);
+        item.setDate(date);
+        item.setLatitude(latitude); //0 for now, should be intent extra
+        item.setLongitude(longitude); //same applies here
+        item.setCategory(content);
+        item.setDescription(description);
+        item.setTown("Regensburg"); //Should be converted from gps and inserted
+        item.setContact(contact);
+        newItem.push().setValue(item);
+
+
+        //SAVE
+
+        Toast.makeText(NewEntryActivity.this, "Item saved!", Toast.LENGTH_LONG).show();
+        finish();
     }
 
 

@@ -28,6 +28,7 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.vision.text.Text;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     //FIREBASE -------------
     private ListView lostListView;
+    private ListView foundListView;
 
 
 
@@ -73,25 +75,15 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
 
-        initLists();
-        getFireBaseLostData();
-
-
-
+        initButtons();
         initBars();
         initTabs();
-        initButtons();
+        initLists();
+        getFireBaseLostData();
+        getFireBaseFoundData();
 
 
         buildGoogleApiClient();
-
-        //test
-        LostItem i1 = new LostItem("test", "test",0,0,"test","test", "test", "test");
-        LostItem i2 = new LostItem("test2", "test",0,0,"test","test", "test", "test");
-   //     itemsMissing.add(i1);
-        itemsFound.add(i2);
-
-
     }
 
     private void getFireBaseLostData() {
@@ -107,9 +99,21 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             }
         };
         lostListView.setAdapter(adapter);
-
     }
 
+    private void getFireBaseFoundData() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference foundRef = ref.child("FoundItem");
+
+        FirebaseListAdapter<FoundItem> foundItemFirebaseListAdapter = new FirebaseListAdapter<FoundItem>(this, FoundItem.class, android.R.layout.two_line_list_item, foundRef) {
+            @Override
+            protected void populateView(View v, FoundItem model, int position) {
+                ((TextView)v.findViewById(android.R.id.text1)).setText(model.getName());
+                ((TextView)v.findViewById(android.R.id.text2)).setText(model.getDescription());
+            }
+        };
+        foundListView.setAdapter(foundItemFirebaseListAdapter);
+    }
 
     private void initBars() {
         getSupportActionBar().hide();
@@ -128,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 .build();
     }
 
-
     private void initButtons() {
         addEntryButton = (Button) findViewById(R.id.new_entry_button);
         setLocButton = (Button) findViewById(R.id.set_loc_button);
@@ -145,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 openMapsActivity();
             }
         });
-
     }
 
     private void openMapsActivity() {
@@ -158,11 +160,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             i.putExtra("last_loc", defaultLatLng);
         }
         startActivityForResult(i, 1);
-
     }
 
     private void openNewEntryActivity() {
         Intent i = new Intent(this, NewEntryActivity.class);
+        startActivityForResult(i, 1);
         //add location extra here later
         startActivity(i);
     }
@@ -192,19 +194,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
     private void initLists() {
-      //  ListView missingList = (ListView) findViewById(R.id.lost_list);
         lostListView = (ListView)findViewById(R.id.lost_list);
-
-        ListView foundList = (ListView) findViewById(R.id.found_list);
-
-
-      //  itemsMissing = new ArrayList<LostItem>();
-       // adapter = new ItemArrayAdapter(MainActivity.this, itemsMissing);
-
-
-        itemsFound = new ArrayList<LostItem>();
-        adapter = new ItemArrayAdapter(MainActivity.this, itemsFound);
-        foundList.setAdapter(adapter);
+        foundListView = (ListView)findViewById(R.id.found_list);
     }
 
 
@@ -252,6 +243,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             if (theFindSpot == null) {
                 theFindSpot = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                 updateLocationBar();
+                Intent intent = new Intent();
+                intent.putExtra("latitude", mLastLocation.getLatitude());
+                intent.putExtra("longitude", mLastLocation.getLongitude());
+                setResult(1, intent);
             }
 
         } else {
