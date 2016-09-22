@@ -144,7 +144,7 @@ public class NewEntryActivity extends AppCompatActivity {
 
         LostItem item = new LostItem(name, date, 0, 0, content, description, description, description);
 
-
+        //warum setzen wir die Werte ein 2. mal? /Alex
         item.setName(name);
         item.setDate(date);
         item.setLatitude(longitude); //0 for now, should be intent extra
