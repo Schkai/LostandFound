@@ -28,10 +28,8 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.vision.text.Text;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -164,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     private void openNewEntryActivity() {
         Intent i = new Intent(this, NewEntryActivity.class);
-        startActivityForResult(i, 1);
+
         //add location extra here later
         startActivity(i);
     }

@@ -28,15 +28,13 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import lostandfound.mi.ur.de.lostandfound.FireBase.FirebaseHelper;
-import lostandfound.mi.ur.de.lostandfound.FireBase.MyAdapter;
-
 /**
  * Created by Alexander on 31.08.2016.
  */
 public class NewEntryActivity extends AppCompatActivity {
 
     private Spinner spinner;
+
     private double latitude;
     private double longitude;
 
@@ -60,6 +58,8 @@ public class NewEntryActivity extends AppCompatActivity {
         //initialize fb
         db = FirebaseDatabase.getInstance().getReference();
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -100,39 +100,48 @@ public class NewEntryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
                 if(String.valueOf(spinner.getSelectedItem()) == "Lost") {
 
-                    pushNewLostDataToServer();
+                    Firebase newItem = ref.child("LostItem");
+                    newItem.push().setValue(createItemFromInput());
 
                 } else {
 
-                    pushNewFoundDataToServer();
+
+                    Firebase newItem = ref.child("FoundItem");
+                    newItem.push().setValue(createItemFromInput());
 
                 }
+
+
+                Toast.makeText(NewEntryActivity.this, "Item saved!", Toast.LENGTH_LONG).show();
+                finish();
 
             }
         });
     }
 
-    private void pushNewFoundDataToServer() {
+    private LostItem createItemFromInput() {
 
         //GET DATA
         EditText nameEdit = (EditText) findViewById(R.id.input_name_edit);
         EditText dateEdit = (EditText) findViewById(R.id.input_date_edit);
+        //Double latitude = getIntent().getDoubleExtra("latitude", 0);
+        //Double longitude = getIntent().getDoubleExtra("longitude", 0);
         EditText contentEdit = (EditText) findViewById(R.id.input_content_edit);
         EditText descEdit = (EditText) findViewById(R.id.input_description_edit);
         EditText contactEdit = (EditText) findViewById(R.id.input_contact_edit);
 
+
         String name = nameEdit.getText().toString();
         String date = dateEdit.getText().toString();
-       // Double latitude = getIntent().getDoubleExtra("latitude", 0);
-      //  Double longitude = getIntent().getDoubleExtra("longitude", 0);
+        // Double latitude = getIntent().getDoubleExtra("latitude", 0);
+        //  Double longitude = getIntent().getDoubleExtra("longitude", 0);
         String content = contentEdit.getText().toString();
         String description = descEdit.getText().toString();
         String contact = contactEdit.getText().toString();
 
-
-        Firebase newItem = ref.child("FoundItem");
         LostItem item = new LostItem(name, date, 0, 0, content, description, description, description);
 
 
@@ -144,49 +153,7 @@ public class NewEntryActivity extends AppCompatActivity {
         item.setDescription(description);
         item.setTown("Regensburg"); //Should be converted from gps and inserted
         item.setContact(contact);
-        newItem.push().setValue(item);
-
-        //SAVE
-        Toast.makeText(NewEntryActivity.this, "Item saved!", Toast.LENGTH_LONG).show();
-        finish();
-    }
-
-    private void pushNewLostDataToServer() {
-
-        //GET DATA
-        EditText nameEdit = (EditText) findViewById(R.id.input_name_edit);
-        EditText dateEdit = (EditText) findViewById(R.id.input_date_edit);
-        //Double latitude = getIntent().getDoubleExtra("latitude", 0);
-        //Double longitude = getIntent().getDoubleExtra("longitude", 0);
-        EditText contentEdit = (EditText) findViewById(R.id.input_content_edit);
-        EditText descEdit = (EditText) findViewById(R.id.input_description_edit);
-        EditText contactEdit = (EditText) findViewById(R.id.input_contact_edit);
-
-        String name = nameEdit.getText().toString();
-        String date = dateEdit.getText().toString();
-        String content = contentEdit.getText().toString();
-        String description = descEdit.getText().toString();
-        String contact = contactEdit.getText().toString();
-
-
-        Firebase newItem = ref.child("LostItem");
-        LostItem item = new LostItem(name, date, 0, 0, content, description, description, description);
-
-        item.setName(name);
-        item.setDate(date);
-        item.setLatitude(latitude); //0 for now, should be intent extra
-        item.setLongitude(longitude); //same applies here
-        item.setCategory(content);
-        item.setDescription(description);
-        item.setTown("Regensburg"); //Should be converted from gps and inserted
-        item.setContact(contact);
-        newItem.push().setValue(item);
-
-
-        //SAVE
-
-        Toast.makeText(NewEntryActivity.this, "Item saved!", Toast.LENGTH_LONG).show();
-        finish();
+        return item;
     }
 
 

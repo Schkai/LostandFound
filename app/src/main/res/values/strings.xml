@@ -4,7 +4,7 @@
     <string name="change_location">Search elsewhere</string>
     <string name="new_entry">+</string>
     <string name="input_item_name">Name of the item</string>
-    <string name="input_item_content">What exactly are you missing?</string>
+    <string name="input_item_content">What exactly have you found/lost?</string>
     <string name="input_item_description">Describe your item</string>
     <string name="input_date">Date</string>
     <string name="input_category">Category</string>
