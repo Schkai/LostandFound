@@ -1,6 +1,8 @@
 package lostandfound.mi.ur.de.lostandfound;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -43,14 +45,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng lastLoc = getIntent().getExtras().getParcelable("last_loc");
+        LatLng lastLoc;
+        boolean lastLocUnknown = getIntent().getBooleanExtra("loc_unknown", false);
+
+
         // Add a marker and move the camera
 
-        if (lastLoc == null) {lastLoc= new LatLng(0,0);}
-            marker = mMap.addMarker(new MarkerOptions().position(lastLoc).title("Deine Position"));
+        if (lastLocUnknown) {
+            lastLoc = new LatLng(0, 0);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLoc));
+
+        } else{
+            lastLoc = getIntent().getExtras().getParcelable("last_loc");
+            float zoomLevel = (float) 15.0;
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastLoc, zoomLevel));}
+
+        marker = mMap.addMarker(new MarkerOptions().position(lastLoc).title("Deine Position"));
 
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLoc));
+
+
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
@@ -61,10 +75,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 marker.remove();
                 marker = mMap.addMarker(markerOpt);
 
-                setResult(Activity.RESULT_OK,
-                        new Intent().putExtra("latitude", marker.getPosition().latitude).putExtra("longitude", marker.getPosition().longitude));
 
-                finish();
+                //build dialog
+                AlertDialog.Builder dialog = new AlertDialog.Builder(
+                        MapsActivity.this);
+                dialog.setTitle(R.string.mapsDialogTitle);
+                dialog.setMessage(R.string.mapsDialogTitle);
+                dialog.setNegativeButton(R.string.mapsDialogNo, null);
+                dialog.setPositiveButton(R.string.mapsDialogYes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setResult(Activity.RESULT_OK,
+                                new Intent().putExtra("latitude", marker.getPosition().latitude).putExtra("longitude", marker.getPosition().longitude));
+
+                        finish();
+                    }
+                });
+
+                dialog.show();
+
             }
         });
     }

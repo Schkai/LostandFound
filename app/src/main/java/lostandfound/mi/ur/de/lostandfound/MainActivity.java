@@ -77,16 +77,15 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         initBars();
         initTabs();
         initLists();
-        getFireBaseLostData();
-        getFireBaseFoundData();
-
+        getFireBaseData(lostListView, "LostItem");
+        getFireBaseData(foundListView, "FoundItem");
 
         buildGoogleApiClient();
     }
 
-    private void getFireBaseLostData() {
+    private void getFireBaseData(ListView listView, String refChild) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference lostRef = ref.child("LostItem");
+        DatabaseReference lostRef = ref.child(refChild);
 
 
         FirebaseListAdapter<LostItem> adapter = new FirebaseListAdapter<LostItem>(this, LostItem.class, android.R.layout.two_line_list_item, lostRef) {
@@ -96,22 +95,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 ((TextView)v.findViewById(android.R.id.text2)).setText(model.getDescription());
             }
         };
-        lostListView.setAdapter(adapter);
+       listView.setAdapter(adapter);
     }
 
-    private void getFireBaseFoundData() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference foundRef = ref.child("FoundItem");
-
-        FirebaseListAdapter<FoundItem> foundItemFirebaseListAdapter = new FirebaseListAdapter<FoundItem>(this, FoundItem.class, android.R.layout.two_line_list_item, foundRef) {
-            @Override
-            protected void populateView(View v, FoundItem model, int position) {
-                ((TextView)v.findViewById(android.R.id.text1)).setText(model.getName());
-                ((TextView)v.findViewById(android.R.id.text2)).setText(model.getDescription());
-            }
-        };
-        foundListView.setAdapter(foundItemFirebaseListAdapter);
-    }
 
     private void initBars() {
         getSupportActionBar().hide();
@@ -151,12 +137,15 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private void openMapsActivity() {
 
         Intent i = new Intent(this, MapsActivity.class);
+        boolean locationUnknown =false;
         if (theFindSpot != null) {
             i.putExtra("last_loc", theFindSpot);
         } else {
-            LatLng defaultLatLng = new LatLng(0, 0);
-            i.putExtra("last_loc", defaultLatLng);
+            /*LatLng defaultLatLng = new LatLng(0, 0);
+            i.putExtra("last_loc", defaultLatLng);*/
+            locationUnknown=true;
         }
+        i.putExtra("loc_unknown", locationUnknown);
         startActivityForResult(i, 1);
     }
 
