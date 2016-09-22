@@ -4,8 +4,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,6 +20,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -28,7 +37,72 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        setUpSearchBar();
 
+
+    }
+
+    private void setUpSearchBar() {
+
+        Button searchButton = (Button) findViewById((R.id.search_button));
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText SearchEdit = (EditText) findViewById(R.id.search_edit_text);
+                String location = SearchEdit.getText().toString();
+                List<android.location.Address> addressList = null;
+                if (!location.equals("")) {
+                    Geocoder geocoder = new Geocoder(MapsActivity.this);
+                    try {
+                        addressList = geocoder.getFromLocationName(location, 1);
+
+                    } catch (IOException e) {
+                       // Toast.makeText(MapsActivity.this, "Address unknown", Toast.LENGTH_LONG).show();
+
+                        e.printStackTrace();
+                    }
+
+                    if (addressList != null&&addressList.size()>0) {
+                        android.location.Address address = addressList.get(0);
+                        LatLng latLongLoc = new LatLng(address.getLatitude(), address.getLongitude());
+                        MarkerOptions markerOpt = new MarkerOptions()
+                                .position(latLongLoc)
+                                .title("Your Position?");
+
+                        marker.remove();
+                        float zoomLevel = (float) 15.0;
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLongLoc, zoomLevel));
+                        marker = mMap.addMarker(markerOpt);
+
+                        showLocationSetDialog();
+                    } else {
+                        Log.d("address is null ","address is null");
+                        Toast.makeText(MapsActivity.this, "Address unknown", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+        });
+    }
+
+    private void showLocationSetDialog() {
+        //build dialog
+        AlertDialog.Builder dialog = new AlertDialog.Builder(
+                MapsActivity.this);
+        dialog.setTitle(R.string.mapsDialogTitle);
+        dialog.setMessage(R.string.mapsDialogTitle);
+        dialog.setNegativeButton(R.string.mapsDialogNo, null);
+        dialog.setPositiveButton(R.string.mapsDialogYes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                setResult(Activity.RESULT_OK,
+                        new Intent().putExtra("latitude", marker.getPosition().latitude).putExtra("longitude", marker.getPosition().longitude));
+
+                finish();
+            }
+        });
+
+        dialog.show();
 
     }
 
@@ -55,14 +129,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             lastLoc = new LatLng(0, 0);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLoc));
 
-        } else{
+        } else {
             lastLoc = getIntent().getExtras().getParcelable("last_loc");
             float zoomLevel = (float) 15.0;
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastLoc, zoomLevel));}
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastLoc, zoomLevel));
+        }
 
-        marker = mMap.addMarker(new MarkerOptions().position(lastLoc).title("Deine Position"));
-
-
+        marker = mMap.addMarker(new MarkerOptions().position(lastLoc).title("Your position?"));
 
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -74,25 +147,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .title("New Marker");
                 marker.remove();
                 marker = mMap.addMarker(markerOpt);
-
-
-                //build dialog
-                AlertDialog.Builder dialog = new AlertDialog.Builder(
-                        MapsActivity.this);
-                dialog.setTitle(R.string.mapsDialogTitle);
-                dialog.setMessage(R.string.mapsDialogTitle);
-                dialog.setNegativeButton(R.string.mapsDialogNo, null);
-                dialog.setPositiveButton(R.string.mapsDialogYes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setResult(Activity.RESULT_OK,
-                                new Intent().putExtra("latitude", marker.getPosition().latitude).putExtra("longitude", marker.getPosition().longitude));
-
-                        finish();
-                    }
-                });
-
-                dialog.show();
+                showLocationSetDialog();
 
             }
         });
