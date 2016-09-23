@@ -24,21 +24,36 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback/*, PlaceSelectionListener */{
 
     private GoogleMap mMap;
     private Marker marker;
+    private LocationHelper mLocHelper;
+   // private TextView mPlaceDetailsText;
 
+    //private TextView mPlaceAttribution;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLocHelper = new LocationHelper(this);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         setUpSearchBar();
+/*
+        // Retrieve the PlaceAutocompleteFragment.
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
+        // Register a listener to receive callbacks when a place has been selected or an error has
+        // occurred.
+        autocompleteFragment.setOnPlaceSelectedListener(this);
+        // Retrieve the TextViews that will display details about the selected place.
+        mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
+        mPlaceAttribution = (TextView) findViewById(R.id.place_attribution);
+*/
 
     }
 
@@ -74,7 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLongLoc, zoomLevel));
                         marker = mMap.addMarker(markerOpt);
 
-                        showLocationSetDialog();
+                        showLocationSetDialog(location);
                     } else {
                         Log.d("address is null ","address is null");
                         Toast.makeText(MapsActivity.this, "Address unknown", Toast.LENGTH_LONG).show();
@@ -85,12 +100,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    private void showLocationSetDialog() {
+    private void showLocationSetDialog(String destination) {
         //build dialog
         AlertDialog.Builder dialog = new AlertDialog.Builder(
                 MapsActivity.this);
+        String Message = getString(R.string.mapsDialogTitle) +" "+destination+"?";
         dialog.setTitle(R.string.mapsDialogTitle);
-        dialog.setMessage(R.string.mapsDialogTitle);
+        dialog.setMessage(Message);
         dialog.setNegativeButton(R.string.mapsDialogNo, null);
         dialog.setPositiveButton(R.string.mapsDialogYes, new DialogInterface.OnClickListener() {
             @Override
@@ -147,9 +163,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .title("New Marker");
                 marker.remove();
                 marker = mMap.addMarker(markerOpt);
-                showLocationSetDialog();
+                showLocationSetDialog(mLocHelper.getAddressString(point.latitude,point.longitude));
 
             }
         });
     }
+/*
+    @Override
+    public void onPlaceSelected(Place place) {
+        Log.i("", "Place Selected: " + place.getName());
+
+        // Format the returned place's details and display them in the TextView.
+
+
+        CharSequence attributions = place.getAttributions();
+        if (!TextUtils.isEmpty(attributions)) {
+            mPlaceAttribution.setText(Html.fromHtml(attributions.toString()));
+        } else {
+            mPlaceAttribution.setText("");
+        }
+    }
+
+    @Override
+    public void onError(Status status) {
+
+    }
+*/
+
+
 }

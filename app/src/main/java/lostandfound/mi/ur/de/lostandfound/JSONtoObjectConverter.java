@@ -50,7 +50,7 @@ public class JSONtoObjectConverter extends ArrayList<LostItem>{ private static f
                 //int id = jsonObject.getInt(ID);
 
 
-                LostItem item = new LostItem(name, date,longitude, latitude,category, description, town, contact);
+                LostItem item = new LostItem(name, date, latitude, longitude, category, description, contact);
 
                 items.add(item);
 

@@ -63,7 +63,8 @@ public class LocationController implements LocationListener {
         locationUpdateListener = listener;
     }
 
-    public String gecodeLocation(Location location) {
+
+    public String geocodeLocation(Location location) {
         if (!Geocoder.isPresent()) {
             return context.getResources().getString(R.string.location_default_location);
         }
@@ -97,7 +98,7 @@ public class LocationController implements LocationListener {
         locationUpdateListener.onNewLocation(location.getLatitude(),
                 location.getLongitude());
         if (geocoding) {
-            String address = gecodeLocation(location);
+            String address = geocodeLocation(location);
             if (address != null) {
                 locationUpdateListener.onNewGeocode(address);
             }

@@ -11,18 +11,23 @@ public class LostItem {
     private String category;
     private int id;
     private String description;
-    private String town;
+    private String postalCode;
     private String contact;
 
-    public LostItem(String name, String date, double longitude, double latitude, String category, String description, String town, String contact){
+
+    public LostItem(String name, String date, double latitude, double longitude, String category, String description, String contact){
         this.name=name;
         this.date=date;
         this.longitude = longitude;
         this.latitude = latitude;
         this.category=category;
         this.description = description;
-        this.town = town;
         this.contact = contact;
+        postalCode ="";
+
+
+
+
     }
 
     public LostItem(){
@@ -36,8 +41,8 @@ public class LostItem {
         this.latitude = latitude;
     }
 
-    public void setTown(String town) {
-        this.town = town;
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     public void setContact(String contact) {
@@ -66,10 +71,12 @@ public class LostItem {
     public String getName() {return name;}
     public String getDate() {return date;}
     public double getLongitude() {return longitude;}
-    public double getLatitude() {return longitude;}
+    public double getLatitude() {return latitude;}
     public String getCategory() {return category;}
     public String getContact() {return contact;}
-    public String getTown() {return town;}
+    public String getPostalCode() {
+
+        return postalCode;}
     public int getId() {return id;}
 
 

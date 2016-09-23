@@ -19,7 +19,7 @@
     <string name="input_contact">Contact</string>
     <string name="post_options_prompt">Have you Lost or Found something?</string>
     <string name="spinner_option_text">Have you Lost or Found something?</string>
-    <string name="mapsDialogTitle">Show items for this area?</string>
+    <string name="mapsDialogTitle">Show items near</string>
     <string name="mapsDialogYes">Yes</string>
     <string name="mapsDialogNo">No, place marker again</string>
     <string name="how_can_you_be_reached">How can you be reached?</string>

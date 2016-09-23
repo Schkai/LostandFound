@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,7 @@ import com.firebase.client.Firebase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,13 +44,15 @@ public class NewEntryActivity extends AppCompatActivity {
 
     DatabaseReference db;
     Firebase ref = new Firebase("https://lostandfound-d91c9.firebaseio.com");
-
+    private LocationController locationController;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
+
+        locationController =new LocationController(this);
 
         initDateInputField();
         initSpinner();
@@ -142,7 +147,7 @@ public class NewEntryActivity extends AppCompatActivity {
         String description = descEdit.getText().toString();
         String contact = contactEdit.getText().toString();
 
-        LostItem item = new LostItem(name, date, 0, 0, content, description, description, description);
+        LostItem item = new LostItem(name, date, 0, 0, content, description, description);
 
         //warum setzen wir die Werte ein 2. mal? /Alex
         item.setName(name);
@@ -151,12 +156,32 @@ public class NewEntryActivity extends AppCompatActivity {
         item.setLongitude(latitude); //same applies here
         item.setCategory(content);
         item.setDescription(description);
-        item.setTown("Regensburg"); //Should be converted from gps and inserted
+        //item.setPostalCode("Regensburg"); //Should be converted from gps and inserted
+        updatePostalCodeForItem(item);
         item.setContact(contact);
         return item;
     }
 
+    public void updatePostalCodeForItem(LostItem item) {
+        String postalCode = "unknown";
+        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses = null;
 
+        try {
+            addresses = gcd.getFromLocation(item.getLatitude(), item.getLongitude(), 1);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (addresses != null && addresses.size() > 0) {
+
+            postalCode = addresses.get(0).getPostalCode();
+
+        }
+        item.setPostalCode(postalCode);
+    }
     private void initDateInputField() {
 
         EditText dateEdit = (EditText) findViewById(R.id.input_date_edit);

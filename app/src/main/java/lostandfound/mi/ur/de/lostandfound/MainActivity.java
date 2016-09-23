@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
+    private LocationHelper locationHelper;
 
     //FIREBASE -------------
     private ListView lostListView;
@@ -65,14 +66,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Firebase.setAndroidContext(this);
 
+        Firebase.setAndroidContext(this);
+        locationHelper= new LocationHelper(getApplicationContext());
         initButtons();
         initBars();
         initTabs();
@@ -81,7 +81,33 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         getFireBaseData(foundListView, "FoundItem");
 
         buildGoogleApiClient();
+
+        LostItem item = new LostItem("", "",  49.03451, 12.11923,"", "", "");
+        updatePostalCodeForItem(item);
+        Toast.makeText(MainActivity.this, "town: " + item.getPostalCode(), Toast.LENGTH_LONG).show();
     }
+    private void updatePostalCodeForItem(LostItem item){
+        String postalCode="unknown";
+        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses = null;
+
+        try {
+            addresses = gcd.getFromLocation(item.getLatitude(), item.getLongitude(), 1);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (addresses!=null&&addresses.size() > 0) {
+
+            postalCode = addresses.get(0).getPostalCode();
+
+        }
+        item.setPostalCode(postalCode);
+    }
+
+
 
     private void getFireBaseData(ListView listView, String refChild) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
@@ -91,11 +117,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         FirebaseListAdapter<LostItem> adapter = new FirebaseListAdapter<LostItem>(this, LostItem.class, android.R.layout.two_line_list_item, lostRef) {
             @Override
             protected void populateView(View v, LostItem model, int position) {
-                ((TextView)v.findViewById(android.R.id.text1)).setText(model.getName());
-                ((TextView)v.findViewById(android.R.id.text2)).setText(model.getDescription());
+                ((TextView) v.findViewById(android.R.id.text1)).setText(model.getName());
+                ((TextView) v.findViewById(android.R.id.text2)).setText(model.getDescription());
             }
         };
-       listView.setAdapter(adapter);
+        listView.setAdapter(adapter);
     }
 
 
@@ -137,13 +163,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private void openMapsActivity() {
 
         Intent i = new Intent(this, MapsActivity.class);
-        boolean locationUnknown =false;
+        boolean locationUnknown = false;
         if (theFindSpot != null) {
             i.putExtra("last_loc", theFindSpot);
         } else {
             /*LatLng defaultLatLng = new LatLng(0, 0);
             i.putExtra("last_loc", defaultLatLng);*/
-            locationUnknown=true;
+            locationUnknown = true;
         }
         i.putExtra("loc_unknown", locationUnknown);
         startActivityForResult(i, 1);
@@ -172,17 +198,16 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         tabHost.addTab(tabSpec);
     }
 
-    private void initViews(){
-     //   mRecyclerView = (RecyclerView) findViewById(R.id.lostView);
+    private void initViews() {
+        //   mRecyclerView = (RecyclerView) findViewById(R.id.lostView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
     }
 
 
-
     private void initLists() {
-        lostListView = (ListView)findViewById(R.id.lost_list);
-        foundListView = (ListView)findViewById(R.id.found_list);
+        lostListView = (ListView) findViewById(R.id.lost_list);
+        foundListView = (ListView) findViewById(R.id.found_list);
     }
 
 
@@ -246,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     private void updateLocationBar() {
         String locationName = "items near ";
-        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        /*Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(theFindSpot.latitude, theFindSpot.longitude, 1);
             if (addresses != null && addresses.size() > 0) {
@@ -255,7 +280,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         } catch (IOException e) {
             e.printStackTrace();
             //handle exception here
-        }
+        } */
+        LocationHelper locHelper= new LocationHelper(getApplicationContext());
+        locationName+=locHelper.getAddressString(theFindSpot.latitude,theFindSpot.longitude);
         locationBar.setText(locationName);
     }
 
