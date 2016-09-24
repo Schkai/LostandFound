@@ -3,8 +3,6 @@ package lostandfound.mi.ur.de.lostandfound;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -31,10 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
@@ -82,29 +77,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         buildGoogleApiClient();
 
-        LostItem item = new LostItem("", "",  49.03451, 12.11923,"", "", "");
-        updatePostalCodeForItem(item);
-        Toast.makeText(MainActivity.this, "town: " + item.getPostalCode(), Toast.LENGTH_LONG).show();
-    }
-    private void updatePostalCodeForItem(LostItem item){
-        String postalCode="unknown";
-        Geocoder gcd = new Geocoder(this, Locale.getDefault());
-        List<Address> addresses = null;
-
-        try {
-            addresses = gcd.getFromLocation(item.getLatitude(), item.getLongitude(), 1);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (addresses!=null&&addresses.size() > 0) {
-
-            postalCode = addresses.get(0).getPostalCode();
-
-        }
-        item.setPostalCode(postalCode);
     }
 
 
@@ -177,6 +149,17 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     private void openNewEntryActivity() {
         Intent i = new Intent(this, NewEntryActivity.class);
+        boolean locationUnknown = false;
+        if (theFindSpot != null) {
+            i.putExtra("last_loc", theFindSpot);
+        } else {
+            /*LatLng defaultLatLng = new LatLng(0, 0);
+            i.putExtra("last_loc", defaultLatLng);*/
+            locationUnknown = true;
+        }
+        i.putExtra("loc_unknown", locationUnknown);
+
+
 
         //add location extra here later
         startActivity(i);

@@ -1,11 +1,10 @@
 package lostandfound.mi.ur.de.lostandfound;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -20,10 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,14 +36,14 @@ import java.util.Locale;
 public class NewEntryActivity extends AppCompatActivity {
 
     private Spinner spinner;
-
+    private EditText placeEdit;
+    private LocationHelper locationHelper;
     private double latitude;
     private double longitude;
 
 
     DatabaseReference db;
     Firebase ref = new Firebase("https://lostandfound-d91c9.firebaseio.com");
-    private LocationController locationController;
 
 
     @Override
@@ -52,9 +51,10 @@ public class NewEntryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
 
-        locationController =new LocationController(this);
+        locationHelper = new LocationHelper(this);
 
         initDateInputField();
+        initPlaceInputField();
         initSpinner();
         //  initCategorySpinner();
         initPublishEntryButton();
@@ -64,19 +64,55 @@ public class NewEntryActivity extends AppCompatActivity {
         db = FirebaseDatabase.getInstance().getReference();
     }
 
+    private void initPlaceInputField() {
+        placeEdit = (EditText) findViewById(R.id.input_place_edit);
+        final boolean lastLocUnknown = getIntent().getBooleanExtra("loc_unknown", false);
+        LatLng lastLoc;
+        placeEdit.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+                //open MapsActivity
+                Intent i = new Intent(NewEntryActivity.this, MapsActivity.class);
+                boolean locationUnknown = false;
+                if (!lastLocUnknown) {
+                    LatLng loc = getIntent().getExtras().getParcelable("last_loc");
+                    i.putExtra("last_loc", loc);
+                } else {
+
+                    locationUnknown = true;
+                }
+                i.putExtra("loc_unknown", locationUnknown);
+                startActivityForResult(i, 1);
+            }
+        });
+
+
+        if (!lastLocUnknown) {
+
+            lastLoc = getIntent().getExtras().getParcelable("last_loc");
+            String address = locationHelper.getAddressString(lastLoc.latitude, lastLoc.longitude);
+            placeEdit.setText("near " + address);
+        }
+
+    }
+
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1){
+        //super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             latitude = extras.getDouble("latitude");
             longitude = extras.getDouble("longitude");
+            String address = locationHelper.getAddressString(latitude, longitude);
+            placeEdit.setText("near " + address);
         }
     }
 
-    private void initSpinner(){
+    private void initSpinner() {
         spinner = (Spinner) findViewById(R.id.post_option_spinner);
 
         List<String> list = new ArrayList<String>();
@@ -91,7 +127,6 @@ public class NewEntryActivity extends AppCompatActivity {
         addListenerOnSpinnerItemSelected();
 
 
-
     }
 
     private void addListenerOnSpinnerItemSelected() {
@@ -100,13 +135,13 @@ public class NewEntryActivity extends AppCompatActivity {
 
 
     private void initPublishEntryButton() {
-        Button publishEntryButton = (Button)findViewById(R.id.publish_entry_button);
+        Button publishEntryButton = (Button) findViewById(R.id.publish_entry_button);
         publishEntryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-                if(String.valueOf(spinner.getSelectedItem()) == "Lost") {
+                if (String.valueOf(spinner.getSelectedItem()) == "Lost") {
 
                     Firebase newItem = ref.child("LostItem");
                     newItem.push().setValue(createItemFromInput());
@@ -147,22 +182,21 @@ public class NewEntryActivity extends AppCompatActivity {
         String description = descEdit.getText().toString();
         String contact = contactEdit.getText().toString();
 
-        LostItem item = new LostItem(name, date, 0, 0, content, description, description);
+        LostItem item = new LostItem(name, date, latitude, longitude, content, description, contact);
 
         //warum setzen wir die Werte ein 2. mal? /Alex
         item.setName(name);
         item.setDate(date);
-        item.setLatitude(longitude); //0 for now, should be intent extra
-        item.setLongitude(latitude); //same applies here
+        item.setLatitude(latitude);
+        item.setLongitude(longitude);
         item.setCategory(content);
         item.setDescription(description);
-        //item.setPostalCode("Regensburg"); //Should be converted from gps and inserted
-        updatePostalCodeForItem(item);
+        locationHelper.updatePostalCodeForItem(item);
         item.setContact(contact);
         return item;
     }
 
-    public void updatePostalCodeForItem(LostItem item) {
+    /*public void updatePostalCodeForItem(LostItem item) {
         String postalCode = "unknown";
         Geocoder gcd = new Geocoder(this, Locale.getDefault());
         List<Address> addresses = null;
@@ -181,7 +215,7 @@ public class NewEntryActivity extends AppCompatActivity {
 
         }
         item.setPostalCode(postalCode);
-    }
+    }*/
     private void initDateInputField() {
 
         EditText dateEdit = (EditText) findViewById(R.id.input_date_edit);
@@ -212,17 +246,17 @@ public class NewEntryActivity extends AppCompatActivity {
     }
 
     //DateDialogue
-    public static class DatePickFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+    public static class DatePickFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState){
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
             //set current date as he default date
             final Calendar c = Calendar.getInstance();
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
 
-            return new DatePickerDialog(getActivity(), this,year,month,dayOfMonth);
+            return new DatePickerDialog(getActivity(), this, year, month, dayOfMonth);
 
         }
 

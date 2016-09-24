@@ -24,6 +24,7 @@
     <string name="mapsDialogNo">No, place marker again</string>
     <string name="how_can_you_be_reached">How can you be reached?</string>
     <string name="search_bar_hint">Enter address</string>
+    <string name="input_place">place</string>
 
 
     <string-array name="post_options_array">
