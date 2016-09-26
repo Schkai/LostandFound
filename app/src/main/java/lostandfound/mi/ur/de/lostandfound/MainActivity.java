@@ -30,6 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 ((TextView) v.findViewById(android.R.id.text2)).setText(model.getDescription());
             }
         };
+        listView.setStackFromBottom(true);
         listView.setAdapter(adapter);
     }
 
@@ -243,7 +246,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 intent.putExtra("longitude", mLastLocation.getLongitude());
                 setResult(1, intent);
             }
-
         } else {
             if (theFindSpot == null) {
                 Toast.makeText(this, "no Location detected", Toast.LENGTH_LONG).show();
@@ -298,7 +300,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             theFindSpot = new LatLng(latitude, longitude);
             updateLocationBar();
         }
-
     }
 }
 

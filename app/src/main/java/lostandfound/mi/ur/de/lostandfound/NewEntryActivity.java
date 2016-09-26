@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -155,7 +157,9 @@ public class NewEntryActivity extends AppCompatActivity {
                 }
 
 
-                Toast.makeText(NewEntryActivity.this, "Item saved!", Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Item saved", Snackbar.LENGTH_LONG);
+                snackbar.show();
+             //   Toast.makeText(NewEntryActivity.this, "Item saved!", Toast.LENGTH_LONG).show();
                 finish();
 
             }
@@ -185,15 +189,22 @@ public class NewEntryActivity extends AppCompatActivity {
         LostItem item = new LostItem(name, date, latitude, longitude, content, description, contact);
 
         //warum setzen wir die Werte ein 2. mal? /Alex
-        item.setName(name);
-        item.setDate(date);
-        item.setLatitude(latitude);
-        item.setLongitude(longitude);
-        item.setCategory(content);
-        item.setDescription(description);
-        locationHelper.updatePostalCodeForItem(item);
-        item.setContact(contact);
-        return item;
+        //weil halt.
+
+        if (name.equals("") || description.equals ("")) {
+            Toast.makeText(this, "Please enter a name or a description for your item!", Toast.LENGTH_SHORT).show();
+        } else {
+            item.setName(name);
+            item.setDate(date);
+            item.setLatitude(latitude);
+            item.setLongitude(longitude);
+            item.setCategory(content);
+            item.setDescription(description);
+            locationHelper.updatePostalCodeForItem(item);
+            item.setContact(contact);
+            return item;
+        }
+        return null;
     }
 
     /*public void updatePostalCodeForItem(LostItem item) {
