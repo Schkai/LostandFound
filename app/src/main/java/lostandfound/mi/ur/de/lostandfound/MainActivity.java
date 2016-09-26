@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
     private void initBars() {
-        getSupportActionBar().hide();
         locationBar = (TextView) findViewById(R.id.textView);
 
     }

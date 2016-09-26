@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/location_bar_color"
+        android:textColor="@color/textColorPrimary"
         android:background="@color/colorPrimary"
         android:text="@string/location_default_location"
         android:id="@+id/textView"
