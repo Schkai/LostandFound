@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
     private void getFireBaseData(ListView listView, String refChild) {
+
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         DatabaseReference lostRef = ref.child(refChild);
 
@@ -148,6 +149,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         i.putExtra("loc_unknown", locationUnknown);
         startActivityForResult(i, 1);
     }
+
+    /**
+     * Enters DesignTestActivity for layout testing purposes!
+     * TODO: Change back to NewEntryActivity after new layout is finished!
+     */
 
     private void openNewEntryActivity() {
         Intent i = new Intent(this, NewEntryActivity.class);

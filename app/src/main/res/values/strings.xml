@@ -25,6 +25,7 @@
     <string name="how_can_you_be_reached">How can you be reached?</string>
     <string name="search_bar_hint">Enter address</string>
     <string name="input_place">place</string>
+    <string name="list_item_nested_textview">Have you lost or found something?</string>
 
 
     <string-array name="post_options_array">
