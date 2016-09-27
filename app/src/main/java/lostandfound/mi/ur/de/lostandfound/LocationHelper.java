@@ -15,14 +15,15 @@ import java.util.Locale;
 public class LocationHelper {
 
     private Context context;
-
+    private Geocoder geocoder;
 
     public LocationHelper(Context context) {
         this.context = context;
+        geocoder = new Geocoder(context, Locale.getDefault());
     }
 
     public String getAddressString(double lat, double lng) {
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+
         String address = "";
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
@@ -35,14 +36,33 @@ public class LocationHelper {
         }
         return address;
     }
-
-    public void updatePostalCodeForItem(LostItem item) {
+    public String getPostalCodeFromLatLng(double lat, double lng){
         String postalCode = "unknown";
-        Geocoder gcd = new Geocoder(context, Locale.getDefault());
+
         List<Address> addresses = null;
 
         try {
-            addresses = gcd.getFromLocation(item.getLatitude(), item.getLongitude(), 1);
+            addresses = geocoder.getFromLocation(lat, lng, 1);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (addresses != null && addresses.size() > 0) {
+
+            postalCode = addresses.get(0).getPostalCode();
+
+        }
+        return postalCode;
+    }
+    public void updatePostalCodeForItem(LostItem item) {
+        String postalCode = "unknown";
+
+        List<Address> addresses = null;
+
+        try {
+            addresses = geocoder.getFromLocation(item.getLatitude(), item.getLongitude(), 1);
 
 
         } catch (IOException e) {

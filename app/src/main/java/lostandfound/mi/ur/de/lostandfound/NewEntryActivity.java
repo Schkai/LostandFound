@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -205,7 +204,8 @@ public class NewEntryActivity extends AppCompatActivity {
             item.setLongitude(longitude);
             item.setCategory(content);
             item.setDescription(description);
-            locationHelper.updatePostalCodeForItem(item);
+
+            item.setPostalCode(locationHelper.getPostalCodeFromLatLng(item.getLatitude(),item.getLongitude()));
             item.setContact(contact);
             return item;
         }

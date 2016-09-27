@@ -28,11 +28,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
@@ -92,7 +89,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference lostRef = ref.child(refChild).child("93047");
+        String postalCode = "93047";
+        if (theFindSpot != null){postalCode =locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude,theFindSpot.longitude);}
+        DatabaseReference lostRef = ref.child(refChild).child(postalCode);
 
 
         FirebaseListAdapter<LostItem> adapter = new FirebaseListAdapter<LostItem>(this, LostItem.class, android.R.layout.two_line_list_item, lostRef) {
@@ -108,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
     private void initBars() {
+        getSupportActionBar().hide();
         locationBar = (TextView) findViewById(R.id.textView);
 
     }
