@@ -136,6 +136,11 @@ public class NewEntryActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * TODO: Lost and Found pushes need to be directed to their respective postalCodes
+     * Therefore we have to have the current postalCode and append it to the query like ("LostItems/" + postalcode)
+     */
+
     private void initPublishEntryButton() {
         Button publishEntryButton = (Button) findViewById(R.id.publish_entry_button);
         publishEntryButton.setOnClickListener(new View.OnClickListener() {

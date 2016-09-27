@@ -28,6 +28,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,8 +86,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     private void getFireBaseData(ListView listView, String refChild) {
 
+        /**
+         * TODO: second child of lostRef hast to be a query with the current postalCode (now "93047")
+          */
+
+
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference lostRef = ref.child(refChild);
+        DatabaseReference lostRef = ref.child(refChild).child("93047");
 
 
         FirebaseListAdapter<LostItem> adapter = new FirebaseListAdapter<LostItem>(this, LostItem.class, android.R.layout.two_line_list_item, lostRef) {
@@ -96,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 ((TextView) v.findViewById(android.R.id.text2)).setText(model.getDescription());
             }
         };
-        listView.setStackFromBottom(true);
+
         listView.setAdapter(adapter);
     }
 
@@ -255,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             if (theFindSpot == null) {
                 Toast.makeText(this, "no Location detected", Toast.LENGTH_LONG).show();
                 locationBar.setText("Location nicht gefunden!");
-            }
+                }
         }
     }
 
