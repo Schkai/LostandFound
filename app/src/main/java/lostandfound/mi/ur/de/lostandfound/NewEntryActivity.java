@@ -136,8 +136,8 @@ public class NewEntryActivity extends AppCompatActivity {
 
 
     /**
-     * TODO: Lost and Found pushes need to be directed to their respective postalCodes
-     * Therefore we have to have the current postalCode and append it to the query like ("LostItems/" + postalcode)
+     *  DO NOT (!!!) delete the .toString() in the child query even though android studio won't shut up about it being redundant!
+     *  Just don't do it! It will fuck up the whole database!
      */
 
     private void initPublishEntryButton() {
@@ -149,13 +149,16 @@ public class NewEntryActivity extends AppCompatActivity {
 
                 if (String.valueOf(spinner.getSelectedItem()) == "Lost") {
 
-                    Firebase newItem = ref.child("LostItem");
+                    String postalCode = locationHelper.getPostalCodeFromLatLng(latitude, longitude);
+
+                    Firebase newItem = ref.child("LostItem").child(postalCode.toString());
                     newItem.push().setValue(createItemFromInput());
 
                 } else {
 
+                    String postalCode = locationHelper.getPostalCodeFromLatLng(latitude, longitude);
 
-                    Firebase newItem = ref.child("FoundItem");
+                    Firebase newItem = ref.child("FoundItem").child(postalCode.toString());
                     newItem.push().setValue(createItemFromInput());
 
                 }

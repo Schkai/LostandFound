@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -75,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         getFireBaseData(lostListView, "LostItem");
         getFireBaseData(foundListView, "FoundItem");
 
+
+
+
         buildGoogleApiClient();
 
     }
@@ -90,11 +94,15 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         String postalCode = "93047";
-        if (theFindSpot != null){postalCode =locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude,theFindSpot.longitude);}
-        DatabaseReference lostRef = ref.child(refChild).child(postalCode);
+
+        if (theFindSpot != null){
+            postalCode =locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude,theFindSpot.longitude);
+            System.out.println(postalCode);
+        }
+        DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
 
 
-        FirebaseListAdapter<LostItem> adapter = new FirebaseListAdapter<LostItem>(this, LostItem.class, android.R.layout.two_line_list_item, lostRef) {
+        FirebaseListAdapter<LostItem> adapter = new FirebaseListAdapter<LostItem>(this, LostItem.class, android.R.layout.simple_list_item_2, lostRef) {
             @Override
             protected void populateView(View v, LostItem model, int position) {
                 ((TextView) v.findViewById(android.R.id.text1)).setText(model.getName());
