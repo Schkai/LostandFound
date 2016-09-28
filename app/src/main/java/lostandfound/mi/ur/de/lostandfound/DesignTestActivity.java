@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import lostandfound.mi.ur.de.lostandfound.fragments.FoundFragment;
 import lostandfound.mi.ur.de.lostandfound.fragments.LostFragment;
 
 /**
@@ -43,6 +44,7 @@ public class DesignTestActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new LostFragment(), "Lost");
+        adapter.addFragment(new FoundFragment(), "Lost");
         viewPager.setAdapter(adapter);
     }
 

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -51,13 +52,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     protected static Location mLastLocation;
     private LatLng theFindSpot;
 
-    private RecyclerView mRecyclerView;
+
+    RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private LocationHelper locationHelper;
 
     //FIREBASE -------------
-    private ListView lostListView;
-    private ListView foundListView;
+    private RecyclerView lostListView;
+    private RecyclerView foundListView;
 
 
 
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
 
-    private void getFireBaseData(ListView listView, String refChild) {
+    private void getFireBaseData(RecyclerView recyclerView, String refChild) {
 
         /**
          * TODO: second child of lostRef hast to be a query with the current postalCode (now "93047")
@@ -99,21 +101,17 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             System.out.println(postalCode);
         }
         DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
-
-
-        FirebaseListAdapter<LostItem> adapter = new FirebaseListAdapter<LostItem>(this, LostItem.class, R.layout.item_view, lostRef) {
-            @Override
-            protected void populateView(View v, LostItem model, int position) {
-
-                ((TextView) v.findViewById(R.id.item_name)).setText(model.getName());
-                ((TextView) v.findViewById(R.id.item_category)).setText(model.getCategory());
-                ((TextView) v.findViewById(R.id.item_location)).setText(locationHelper.getAddressString(model.getLatitude(),model.getLongitude()));
-                ((TextView) v.findViewById(R.id.date)).setText(model.getDate());
-                //((TextView) v.findViewById(android.R.id.text2)).setText(model.getDescription());
-            }
-        };
-
-        listView.setAdapter(adapter);
+        FirebaseRecyclerAdapter<LostItem, MessageViewHolder> adapter =
+                new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
+                    @Override
+                    protected void populateViewHolder(MessageViewHolder viewHolder, LostItem model, int position) {
+                        viewHolder.mText.setText(model.getName());
+                        viewHolder.mCategory.setText(model.getCategory());
+                        viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(),model.getLongitude()));
+                        viewHolder.mDate.setText(model.getDate());
+                    }
+                };
+            recyclerView.setAdapter(adapter);
     }
 
 
@@ -214,8 +212,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
     private void initLists() {
-        lostListView = (ListView) findViewById(R.id.lost_list);
-        foundListView = (ListView) findViewById(R.id.found_list);
+        lostListView = (RecyclerView) findViewById(R.id.lost_list);
+        foundListView = (RecyclerView) findViewById(R.id.found_list);
+        lostListView.setHasFixedSize(true);
+        lostListView.setLayoutManager(new LinearLayoutManager(this));
+        foundListView.setHasFixedSize(true);
+        foundListView.setLayoutManager(new LinearLayoutManager(this));
     }
 
 
@@ -324,5 +326,22 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             updateLocation();
         }
     }
+
+    public static class MessageViewHolder extends RecyclerView.ViewHolder {
+        TextView mText;
+        TextView mCategory;
+        TextView mLocation;
+        TextView mDate;
+
+        public MessageViewHolder(View v) {
+            super(v);
+            mText = (TextView) v.findViewById(R.id.item_name);
+            mCategory = (TextView) v.findViewById(R.id.item_category);
+            mLocation = (TextView) v.findViewById(R.id.item_location);
+            mDate = (TextView) v.findViewById(R.id.date);
+        }
+    }
+
+
 }
 
