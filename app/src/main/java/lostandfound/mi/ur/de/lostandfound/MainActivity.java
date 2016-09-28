@@ -101,11 +101,15 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
 
 
-        FirebaseListAdapter<LostItem> adapter = new FirebaseListAdapter<LostItem>(this, LostItem.class, android.R.layout.simple_list_item_2, lostRef) {
+        FirebaseListAdapter<LostItem> adapter = new FirebaseListAdapter<LostItem>(this, LostItem.class, R.layout.item_view, lostRef) {
             @Override
             protected void populateView(View v, LostItem model, int position) {
-                ((TextView) v.findViewById(android.R.id.text1)).setText(model.getName());
-                ((TextView) v.findViewById(android.R.id.text2)).setText(model.getDescription());
+
+                ((TextView) v.findViewById(R.id.item_name)).setText(model.getName());
+                ((TextView) v.findViewById(R.id.item_category)).setText(model.getCategory());
+                ((TextView) v.findViewById(R.id.item_location)).setText(locationHelper.getAddressString(model.getLatitude(),model.getLongitude()));
+                ((TextView) v.findViewById(R.id.date)).setText(model.getDate());
+                //((TextView) v.findViewById(android.R.id.text2)).setText(model.getDescription());
             }
         };
 

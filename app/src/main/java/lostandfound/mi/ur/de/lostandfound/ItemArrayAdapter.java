@@ -36,8 +36,8 @@ public class ItemArrayAdapter  extends ArrayAdapter<LostItem> {private ArrayList
 
         item = items.get(position);
 
-        TextView name = (TextView) v.findViewById(R.id.name);
-        TextView category = (TextView) v.findViewById(R.id.category);
+        TextView name = (TextView) v.findViewById(R.id.item_name);
+        TextView category = (TextView) v.findViewById(R.id.item_category);
         //TextView location = (TextView) v.findViewById(R.id.location);
         TextView date = (TextView) v.findViewById(R.id.date);
 
