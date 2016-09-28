@@ -86,6 +86,7 @@ public class NewEntryActivity extends AppCompatActivity {
                 }
                 i.putExtra("loc_unknown", locationUnknown);
                 startActivityForResult(i, 1);
+
             }
         });
 
@@ -95,6 +96,8 @@ public class NewEntryActivity extends AppCompatActivity {
             lastLoc = getIntent().getExtras().getParcelable("last_loc");
             String address = locationHelper.getAddressString(lastLoc.latitude, lastLoc.longitude);
             placeEdit.setText("near " + address);
+            latitude=lastLoc.latitude;
+            longitude=lastLoc.longitude;
         }
 
     }
