@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -241,7 +240,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         // updates. Gets the best and most recent location currently available, which may be null
         // in rare cases when a location is not available.
 
-
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -259,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             if (theFindSpot == null) {
                 theFindSpot = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                updateLocationBar();
+                updateLocation();
                 Intent intent = new Intent();
                 intent.putExtra("latitude", mLastLocation.getLatitude());
                 intent.putExtra("longitude", mLastLocation.getLongitude());
@@ -273,7 +271,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         }
     }
 
-    private void updateLocationBar() {
+    private void updateLocation() {
+        getFireBaseData(lostListView, "LostItem");
+        getFireBaseData(foundListView, "FoundItem");
         String locationName = "items near ";
         /*Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         try {
@@ -317,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             double longitude = data.getDoubleExtra("longitude", 0);
 
             theFindSpot = new LatLng(latitude, longitude);
-            updateLocationBar();
+            updateLocation();
         }
     }
 }
