@@ -26,6 +26,7 @@
     <string name="search_bar_hint">Enter address</string>
     <string name="input_place">place</string>
     <string name="list_item_nested_textview">Have you lost or found something?</string>
+    <string name="spinner_category_text">Category</string>
 
 
     <string-array name="post_options_array">

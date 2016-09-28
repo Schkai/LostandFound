@@ -36,7 +36,8 @@ import java.util.Locale;
  */
 public class NewEntryActivity extends AppCompatActivity {
 
-    private Spinner spinner;
+    private Spinner lfSpinner;
+    private Spinner categorySpinner;
     private EditText placeEdit;
     private LocationHelper locationHelper;
     private double latitude;
@@ -56,13 +57,34 @@ public class NewEntryActivity extends AppCompatActivity {
 
         initDateInputField();
         initPlaceInputField();
-        initSpinner();
+        initlfSpinner();
+        initCategorySpinner();
         //  initCategorySpinner();
         initPublishEntryButton();
         // back-button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //initialize fb
         db = FirebaseDatabase.getInstance().getReference();
+    }
+
+    private void initCategorySpinner() {
+        categorySpinner = (Spinner) findViewById(R.id.category_spinner);
+        List<String> list = new ArrayList<String>();
+
+        list.add("Other");
+        list.add("Key");
+        list.add("Wallet");
+        list.add("Card");
+        list.add("Clothing");
+        list.add("Electronic device");
+        list.add("Jewelry");
+
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(dataAdapter);
+
+
     }
 
     private void initPlaceInputField() {
@@ -116,8 +138,8 @@ public class NewEntryActivity extends AppCompatActivity {
         }
     }
 
-    private void initSpinner() {
-        spinner = (Spinner) findViewById(R.id.post_option_spinner);
+    private void initlfSpinner() {
+        lfSpinner = (Spinner) findViewById(R.id.post_option_spinner);
 
         List<String> list = new ArrayList<String>();
         list.add("Lost");
@@ -125,15 +147,15 @@ public class NewEntryActivity extends AppCompatActivity {
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(dataAdapter);
+        lfSpinner.setAdapter(dataAdapter);
 
         //Spinner item selection Listener
-        addListenerOnSpinnerItemSelected();
+        addListenerOnSpinnerItemSelected(lfSpinner);
 
 
     }
 
-    private void addListenerOnSpinnerItemSelected() {
+    private void addListenerOnSpinnerItemSelected(Spinner spinner) {
         spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
 
@@ -150,7 +172,7 @@ public class NewEntryActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                if (String.valueOf(spinner.getSelectedItem()) == "Lost") {
+                if (String.valueOf(lfSpinner.getSelectedItem()) == "Lost") {
 
                     String postalCode = locationHelper.getPostalCodeFromLatLng(latitude, longitude);
 
@@ -183,20 +205,17 @@ public class NewEntryActivity extends AppCompatActivity {
         EditText dateEdit = (EditText) findViewById(R.id.input_date_edit);
         //Double latitude = getIntent().getDoubleExtra("latitude", 0);
         //Double longitude = getIntent().getDoubleExtra("longitude", 0);
-        EditText contentEdit = (EditText) findViewById(R.id.input_content_edit);
         EditText descEdit = (EditText) findViewById(R.id.input_description_edit);
         EditText contactEdit = (EditText) findViewById(R.id.input_contact_edit);
 
 
         String name = nameEdit.getText().toString();
         String date = dateEdit.getText().toString();
-        // Double latitude = getIntent().getDoubleExtra("latitude", 0);
-        //  Double longitude = getIntent().getDoubleExtra("longitude", 0);
-        String content = contentEdit.getText().toString();
+        String category = String.valueOf(categorySpinner.getSelectedItem());
         String description = descEdit.getText().toString();
         String contact = contactEdit.getText().toString();
 
-        LostItem item = new LostItem(name, date, latitude, longitude, content, description, contact);
+        LostItem item = new LostItem(name, date, latitude, longitude, category, description, contact);
 
         //warum setzen wir die Werte ein 2. mal? /Alex
         //weil halt.
@@ -208,36 +227,17 @@ public class NewEntryActivity extends AppCompatActivity {
             item.setDate(date);
             item.setLatitude(latitude);
             item.setLongitude(longitude);
-            item.setCategory(content);
+            item.setCategory(category);
             item.setDescription(description);
-
             item.setPostalCode(locationHelper.getPostalCodeFromLatLng(item.getLatitude(),item.getLongitude()));
             item.setContact(contact);
+
             return item;
         }
         return null;
     }
 
-    /*public void updatePostalCodeForItem(LostItem item) {
-        String postalCode = "unknown";
-        Geocoder gcd = new Geocoder(this, Locale.getDefault());
-        List<Address> addresses = null;
 
-        try {
-            addresses = gcd.getFromLocation(item.getLatitude(), item.getLongitude(), 1);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (addresses != null && addresses.size() > 0) {
-
-            postalCode = addresses.get(0).getPostalCode();
-
-        }
-        item.setPostalCode(postalCode);
-    }*/
     private void initDateInputField() {
 
         EditText dateEdit = (EditText) findViewById(R.id.input_date_edit);
