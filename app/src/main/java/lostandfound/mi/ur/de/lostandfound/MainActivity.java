@@ -13,13 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -88,30 +86,27 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     private void getFireBaseData(RecyclerView recyclerView, String refChild) {
 
-        /**
-         * TODO: second child of lostRef hast to be a query with the current postalCode (now "93047")
-          */
 
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        String postalCode = "93047";
+        String postalCode = "unknown";
 
         if (theFindSpot != null){
             postalCode =locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude,theFindSpot.longitude);
-            System.out.println(postalCode);
-        }
-        DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
-        FirebaseRecyclerAdapter<LostItem, MessageViewHolder> adapter =
-                new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
-                    @Override
-                    protected void populateViewHolder(MessageViewHolder viewHolder, LostItem model, int position) {
-                        viewHolder.mText.setText(model.getName());
-                        viewHolder.mCategory.setText(model.getCategory());
-                        viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(),model.getLongitude()));
-                        viewHolder.mDate.setText(model.getDate());
-                    }
-                };
+            DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
+            FirebaseRecyclerAdapter<LostItem, MessageViewHolder> adapter =
+                    new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
+                        @Override
+                        protected void populateViewHolder(MessageViewHolder viewHolder, LostItem model, int position) {
+                            viewHolder.mText.setText(model.getName());
+                            viewHolder.mCategory.setText(model.getCategory());
+                            viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(),model.getLongitude()));
+                            viewHolder.mDate.setText(model.getDate());
+                        }
+                    };
             recyclerView.setAdapter(adapter);
+        }
+
     }
 
 
