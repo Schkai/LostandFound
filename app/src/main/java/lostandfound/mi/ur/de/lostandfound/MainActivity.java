@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private LinearLayoutManager mLinearLayoutManager;
     private LocationHelper locationHelper;
 
-    //FIREBASE -------------
+    //FIREBASE --------------
     private RecyclerView lostListView;
     private RecyclerView foundListView;
 
