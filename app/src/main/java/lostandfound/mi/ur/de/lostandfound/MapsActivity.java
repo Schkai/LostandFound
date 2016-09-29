@@ -163,7 +163,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .title("New Marker");
                 marker.remove();
                 marker = mMap.addMarker(markerOpt);
-                showLocationSetDialog(mLocHelper.getAddressString(point.latitude,point.longitude));
+                showLocationSetDialog(mLocHelper.getAddressString(marker.getPosition().latitude,marker.getPosition().longitude));
 
             }
         });

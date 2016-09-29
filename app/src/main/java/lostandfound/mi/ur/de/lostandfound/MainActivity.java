@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private ArrayList<LostItem> itemsMissing;
     private ArrayAdapter<String> lostAdapter;
     private ArrayList<LostItem> itemsFound;
-    private ItemArrayAdapter adapter;
+   // private ItemArrayAdapter adapter;
     private TabHost tabHost;
     private Button addEntryButton;
     private Button setLocButton;
@@ -68,14 +68,20 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         Firebase.setAndroidContext(this);
         locationHelper= new LocationHelper(getApplicationContext());
+        buildGoogleApiClient();
         initButtons();
         initBars();
-        initTabs();
+
         initLists();
+        initTabs();
+
+        getFireBaseData(foundListView, "FoundItem");
+        getFireBaseData(lostListView, "LostItem");
 
 
 
-        buildGoogleApiClient();
+
+
 
     }
 
@@ -101,10 +107,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                             viewHolder.mDate.setText(model.getDate());
                         }
                     };
+            Log.d("Tabbug", "getFireBaseData, theFindSpot with Lat: "+theFindSpot.latitude+" long: "+ theFindSpot.longitude+ " address: "+locationHelper.getAddressString(theFindSpot.latitude, theFindSpot.longitude)+" PLZ: "+locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude));
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-
-        }
+        }else{Log.d("Tabbug","Findspot is null");}
 
     }
 
@@ -178,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
 
-        //add location extra here later
+
         startActivity(i);
     }
 
@@ -198,11 +204,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         tabHost.addTab(tabSpec);
     }
 
-    private void initViews() {
-        //   mRecyclerView = (RecyclerView) findViewById(R.id.lostView);
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-    }
 
 
     private void initLists() {
@@ -258,10 +259,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             if (theFindSpot == null) {
                 theFindSpot = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                 onLocationChanged();
-                Intent intent = new Intent();
+              /*  Intent intent = new Intent();
                 intent.putExtra("latitude", mLastLocation.getLatitude());
                 intent.putExtra("longitude", mLastLocation.getLongitude());
                 setResult(1, intent);//lol was
+                */
             }
         } else {
             if (theFindSpot == null) {
@@ -272,11 +274,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
     private void onLocationChanged() {
-        getFireBaseData(lostListView, "LostItem");
         getFireBaseData(foundListView, "FoundItem");
+        getFireBaseData(lostListView, "LostItem");
+
         String locationName = "items near ";
 
-
+        Log.d("Tabbug", "onLocationChanged, theFindSpot with Lat: "+theFindSpot.latitude+" long: "+ theFindSpot.longitude+ " address: "+locationHelper.getAddressString(theFindSpot.latitude, theFindSpot.longitude)+" PLZ: "+locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude));
         locationName+=locationHelper.getAddressString(theFindSpot.latitude,theFindSpot.longitude);
         locationBar.setText(locationName);
     }
@@ -308,6 +311,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             double longitude = data.getDoubleExtra("longitude", 0);
 
             theFindSpot = new LatLng(latitude, longitude);
+            Log.d("Tabbug", "onActivity Result, theFindSpot with Lat: "+latitude+" long: "+ longitude+ " address: "+locationHelper.getAddressString(latitude, longitude)+" PLZ: "+locationHelper.getPostalCodeFromLatLng(latitude, longitude));
             onLocationChanged();
         }
     }
