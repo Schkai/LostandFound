@@ -29,6 +29,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Marker marker;
     private LocationHelper mLocHelper;
+
    // private TextView mPlaceDetailsText;
 
     //private TextView mPlaceAttribution;
@@ -104,7 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //build dialog
         AlertDialog.Builder dialog = new AlertDialog.Builder(
                 MapsActivity.this);
-        String Message = getString(R.string.mapsDialogTitle) +" "+destination+"?";
+        String Message = getString(R.string.mapsDialogMessage) +" "+destination+"?";
         dialog.setTitle(R.string.mapsDialogTitle);
         dialog.setMessage(Message);
         dialog.setNegativeButton(R.string.mapsDialogNo, null);

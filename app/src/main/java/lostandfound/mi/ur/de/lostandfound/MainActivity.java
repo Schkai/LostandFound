@@ -75,12 +75,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         initLists();
         initTabs();
 
-        getFireBaseData(foundListView, "FoundItem");
-        getFireBaseData(lostListView, "LostItem");
-
-
-
-
 
 
     }
@@ -105,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                             viewHolder.mCategory.setText(model.getCategory());
                             viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(),model.getLongitude()));
                             viewHolder.mDate.setText(model.getDate());
+
+                            Log.d("Mongo", "ich bin populate view und habe"+model.getName()+ " "+viewHolder.mText.getText().toString());
                         }
                     };
             Log.d("Tabbug", "getFireBaseData, theFindSpot with Lat: "+theFindSpot.latitude+" long: "+ theFindSpot.longitude+ " address: "+locationHelper.getAddressString(theFindSpot.latitude, theFindSpot.longitude)+" PLZ: "+locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude));
@@ -162,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             locationUnknown = true;
         }
         i.putExtra("loc_unknown", locationUnknown);
+
         startActivityForResult(i, 1);
     }
 
@@ -193,9 +190,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         tabHost = (TabHost) findViewById(R.id.tabHost);
         tabHost.setup();
 
-        TabHost.TabSpec tabSpec = tabHost.newTabSpec("Missing");
+        TabHost.TabSpec tabSpec = tabHost.newTabSpec("lost");
         tabSpec.setContent(R.id.lost);
-        tabSpec.setIndicator("Missing");
+        tabSpec.setIndicator("lost");
         tabHost.addTab(tabSpec);
 
         tabSpec = tabHost.newTabSpec("found");
@@ -259,11 +256,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             if (theFindSpot == null) {
                 theFindSpot = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                 onLocationChanged();
-              /*  Intent intent = new Intent();
-                intent.putExtra("latitude", mLastLocation.getLatitude());
-                intent.putExtra("longitude", mLastLocation.getLongitude());
-                setResult(1, intent);//lol was
-                */
             }
         } else {
             if (theFindSpot == null) {

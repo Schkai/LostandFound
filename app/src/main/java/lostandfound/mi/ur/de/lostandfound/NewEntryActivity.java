@@ -107,6 +107,7 @@ public class NewEntryActivity extends AppCompatActivity {
                     locationUnknown = true;
                 }
                 i.putExtra("loc_unknown", locationUnknown);
+
                 startActivityForResult(i, 1);
 
             }

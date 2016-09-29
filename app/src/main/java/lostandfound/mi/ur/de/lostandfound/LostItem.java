@@ -13,6 +13,7 @@ public class LostItem {
     private String description;
     private String postalCode;
     private String contact;
+    private int spamMarked;
 
 
     public LostItem(String name, String date, double latitude, double longitude, String category, String description, String contact){
@@ -24,6 +25,7 @@ public class LostItem {
         this.description = description;
         this.contact = contact;
         postalCode ="";
+        spamMarked=0;
 
 
 
@@ -67,6 +69,7 @@ public class LostItem {
     public void setId(int id) {
         this.id = id;
     }
+    public void markAsSpam(){spamMarked++;}
 
     public String getName() {return name;}
     public String getDate() {return date;}
@@ -74,10 +77,9 @@ public class LostItem {
     public double getLatitude() {return latitude;}
     public String getCategory() {return category;}
     public String getContact() {return contact;}
-    public String getPostalCode() {
-
-        return postalCode;}
+    public String getPostalCode() {return postalCode;}
     public int getId() {return id;}
+    public int getSpamMarked(){return spamMarked;}
 
 
 
