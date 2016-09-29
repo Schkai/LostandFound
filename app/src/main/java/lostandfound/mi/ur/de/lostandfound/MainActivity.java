@@ -13,13 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -74,8 +72,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         initBars();
         initTabs();
         initLists();
-        getFireBaseData(lostListView, "LostItem");
-        getFireBaseData(foundListView, "FoundItem");
+
 
 
 
@@ -94,24 +91,27 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        String postalCode = "93047";
+        String postalCode = "unknown";
 
         if (theFindSpot != null){
             postalCode =locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude,theFindSpot.longitude);
-            System.out.println(postalCode);
-        }
-        DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
-        FirebaseRecyclerAdapter<LostItem, MessageViewHolder> adapter =
-                new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
-                    @Override
-                    protected void populateViewHolder(MessageViewHolder viewHolder, LostItem model, int position) {
-                        viewHolder.mText.setText(model.getName());
-                        viewHolder.mCategory.setText(model.getCategory());
-                        viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(),model.getLongitude()));
-                        viewHolder.mDate.setText(model.getDate());
-                    }
-                };
+
+            DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
+            FirebaseRecyclerAdapter<LostItem, MessageViewHolder> adapter =
+                    new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
+                        @Override
+                        protected void populateViewHolder(MessageViewHolder viewHolder, LostItem model, int position) {
+                            viewHolder.mText.setText(model.getName());
+                            viewHolder.mCategory.setText(model.getCategory());
+                            viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(),model.getLongitude()));
+                            viewHolder.mDate.setText(model.getDate());
+                        }
+                    };
             recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+        }
+
     }
 
 
@@ -263,11 +263,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             if (theFindSpot == null) {
                 theFindSpot = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                updateLocation();
+                onLocationChanged();
                 Intent intent = new Intent();
                 intent.putExtra("latitude", mLastLocation.getLatitude());
                 intent.putExtra("longitude", mLastLocation.getLongitude());
-                setResult(1, intent);
+                setResult(1, intent);//lol was
             }
         } else {
             if (theFindSpot == null) {
@@ -277,22 +277,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         }
     }
 
-    private void updateLocation() {
+    private void onLocationChanged() {
         getFireBaseData(lostListView, "LostItem");
         getFireBaseData(foundListView, "FoundItem");
         String locationName = "items near ";
-        /*Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(theFindSpot.latitude, theFindSpot.longitude, 1);
-            if (addresses != null && addresses.size() > 0) {
-                locationName += addresses.get(0).getAddressLine(0);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            //handle exception here
-        } */
-        LocationHelper locHelper= new LocationHelper(getApplicationContext());
-        locationName+=locHelper.getAddressString(theFindSpot.latitude,theFindSpot.longitude);
+
+
+        locationName+=locationHelper.getAddressString(theFindSpot.latitude,theFindSpot.longitude);
         locationBar.setText(locationName);
     }
 
@@ -323,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             double longitude = data.getDoubleExtra("longitude", 0);
 
             theFindSpot = new LatLng(latitude, longitude);
-            updateLocation();
+            onLocationChanged();
         }
     }
 
