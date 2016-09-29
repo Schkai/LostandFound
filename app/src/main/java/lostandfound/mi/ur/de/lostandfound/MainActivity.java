@@ -83,10 +83,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     private void getFireBaseData(RecyclerView recyclerView, String refChild) {
 
-        /**
-         * TODO: second child of lostRef hast to be a query with the current postalCode (now "93047")
-          */
-
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         String postalCode = "unknown";
