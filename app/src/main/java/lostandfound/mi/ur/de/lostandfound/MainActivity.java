@@ -94,12 +94,22 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 FirebaseRecyclerAdapter < LostItem, MessageViewHolder > adapter =
                         new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
                             @Override
-                            protected void populateViewHolder(MessageViewHolder viewHolder, LostItem model, int position) {
+                            protected void populateViewHolder(MessageViewHolder viewHolder, LostItem model, final int position) {
                                 viewHolder.mText.setText(model.getName());
                                 viewHolder.mCategory.setText(model.getCategory());
                                 viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(), model.getLongitude()));
                                 viewHolder.mDate.setText(model.getDate());
                                 Log.d("Mongo", "ich bin populate view und habe" + model.getName() + " " + viewHolder.mText.getText().toString());
+
+                                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Log.d("Tabbug", "You clicked on position " + position);
+                                        Intent detailIntent = new Intent(view.getContext(), DetailViewActivity.class);
+                                        startActivity(detailIntent);
+                                    }
+                                });
+
                             }
                         };
                 Log.d("Tabbug", "getFireBaseData, theFindSpot with Lat: " + theFindSpot.latitude + " long: " + theFindSpot.longitude + " address: " + locationHelper.getAddressString(theFindSpot.latitude, theFindSpot.longitude) + " PLZ: " + locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude));
