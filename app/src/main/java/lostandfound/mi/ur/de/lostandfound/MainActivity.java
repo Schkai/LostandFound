@@ -81,32 +81,57 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
 
-    private void getFireBaseData(RecyclerView recyclerView, String refChild) {
+    private void getFireBaseData(final RecyclerView recyclerView, final String refChild) {
 
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        String postalCode = "unknown";
 
-        if (theFindSpot != null){
-            postalCode =locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude,theFindSpot.longitude);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-            DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
-            FirebaseRecyclerAdapter<LostItem, MessageViewHolder> adapter =
-                    new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                String postalCode = "unknown";
+                if (theFindSpot != null){
+                    postalCode =locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude,theFindSpot.longitude);
+
+                    DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
+                    final FirebaseRecyclerAdapter<LostItem, MessageViewHolder> adapter =
+                            new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
+                                @Override
+                                protected void populateViewHolder(MessageViewHolder viewHolder, LostItem model, final int position) {
+                                    viewHolder.mText.setText(model.getName());
+                                    viewHolder.mCategory.setText(model.getCategory());
+                                    viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(),model.getLongitude()));
+                                    viewHolder.mDate.setText(model.getDate());
+
+                                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Log.d("Tabbug", "You clicked on " + position);
+
+                                            Intent detailIntent = new Intent(view.getContext(), DetailViewActivity.class);
+                                            startActivity(detailIntent);
+                                        }
+                                    });
+                                }
+
+                            };
+                    Log.d("Tabbug", "getFireBaseData, theFindSpot with Lat: "+theFindSpot.latitude+" long: "+ theFindSpot.longitude+ " address: "+locationHelper.getAddressString(theFindSpot.latitude, theFindSpot.longitude)+" PLZ: "+locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude));
+
+                    runOnUiThread(new Runnable() {
                         @Override
-                        protected void populateViewHolder(MessageViewHolder viewHolder, LostItem model, int position) {
-                            viewHolder.mText.setText(model.getName());
-                            viewHolder.mCategory.setText(model.getCategory());
-                            viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(),model.getLongitude()));
-                            viewHolder.mDate.setText(model.getDate());
+                        public void run() {
+                            recyclerView.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
 
-                            Log.d("Mongo", "ich bin populate view und habe"+model.getName()+ " "+viewHolder.mText.getText().toString());
                         }
-                    };
-            Log.d("Tabbug", "getFireBaseData, theFindSpot with Lat: "+theFindSpot.latitude+" long: "+ theFindSpot.longitude+ " address: "+locationHelper.getAddressString(theFindSpot.latitude, theFindSpot.longitude)+" PLZ: "+locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude));
-            recyclerView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-        }else{Log.d("Tabbug","Findspot is null");}
+                    });
+                }else{Log.d("Tabbug","Findspot is null");}
+            }
+        }) {
+
+        }.start();
+
 
     }
 
@@ -313,9 +338,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         TextView mCategory;
         TextView mLocation;
         TextView mDate;
+        View mView;
 
         public MessageViewHolder(View v) {
             super(v);
+            this.mView = v;
             mText = (TextView) v.findViewById(R.id.item_name);
             mCategory = (TextView) v.findViewById(R.id.item_category);
             mLocation = (TextView) v.findViewById(R.id.item_location);

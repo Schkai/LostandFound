@@ -94,6 +94,7 @@
                 android:id="@+id/mark_as_spam_button"
                 android:layout_marginBottom="16dp"
                 />
+
         </LinearLayout>
     </ScrollView>
 
