@@ -27,6 +27,7 @@
     <string name="input_place">place</string>
     <string name="list_item_nested_textview">Have you lost or found something?</string>
     <string name="spinner_category_text">Category</string>
+    <string name="spam_button">Mark as Spam</string>
 
 
     <string-array name="post_options_array">

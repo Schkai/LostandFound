@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private TabHost tabHost;
     private Button addEntryButton;
     private Button setLocButton;
+    private FloatingActionButton newEntryFab;
 
     public static final int MAP_REQUEST = 0;
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -87,30 +89,57 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
 
-    private void getFireBaseData(RecyclerView recyclerView, String refChild) {
+    private void getFireBaseData(final RecyclerView recyclerView, final String refChild) {
 
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        String postalCode = "unknown";
+                String postalCode = "unknown";
+                if (theFindSpot != null){
+                    postalCode =locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude,theFindSpot.longitude);
 
-        if (theFindSpot != null){
-            postalCode =locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude,theFindSpot.longitude);
+                    DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
+                    final FirebaseRecyclerAdapter<LostItem, MessageViewHolder> adapter =
+                            new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
+                                @Override
+                                protected void populateViewHolder(MessageViewHolder viewHolder, LostItem model, final int position) {
+                                    viewHolder.mText.setText(model.getName());
+                                    viewHolder.mCategory.setText(model.getCategory());
+                                    viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(),model.getLongitude()));
+                                    viewHolder.mDate.setText(model.getDate());
 
-            DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
-            FirebaseRecyclerAdapter<LostItem, MessageViewHolder> adapter =
-                    new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
+                                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Log.d("Tabbug", "You clicked on " + position);
+
+                                            Intent detailIntent = new Intent(view.getContext(), DetailViewActivity.class);
+                                            startActivity(detailIntent);
+                                        }
+                                    });
+                                }
+
+                            };
+                    Log.d("Tabbug", "getFireBaseData, theFindSpot with Lat: "+theFindSpot.latitude+" long: "+ theFindSpot.longitude+ " address: "+locationHelper.getAddressString(theFindSpot.latitude, theFindSpot.longitude)+" PLZ: "+locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude));
+
+                    runOnUiThread(new Runnable() {
                         @Override
-                        protected void populateViewHolder(MessageViewHolder viewHolder, LostItem model, int position) {
-                            viewHolder.mText.setText(model.getName());
-                            viewHolder.mCategory.setText(model.getCategory());
-                            viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(),model.getLongitude()));
-                            viewHolder.mDate.setText(model.getDate());
+                        public void run() {
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
                         }
-                    };
-            Log.d("Tabbug", "getFireBaseData, theFindSpot with Lat: "+theFindSpot.latitude+" long: "+ theFindSpot.longitude+ " address: "+locationHelper.getAddressString(theFindSpot.latitude, theFindSpot.longitude)+" PLZ: "+locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude));
-            recyclerView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-        }else{Log.d("Tabbug","Findspot is null");}
+                    });
+                }else{Log.d("Tabbug","Findspot is null");}
+            }
+        }) {
+
+        }.start();
+
 
     }
 
@@ -133,6 +162,15 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
     private void initButtons() {
+
+     /*   newEntryFab = (FloatingActionButton) findViewById(R.id.fab_new_entry);
+        newEntryFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openNewEntryActivity();
+            }
+        });
+*/
         addEntryButton = (Button) findViewById(R.id.new_entry_button);
         setLocButton = (Button) findViewById(R.id.set_loc_button);
 
@@ -142,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 openNewEntryActivity();
             }
         });
+
         setLocButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -317,6 +356,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
+        View mView;
         TextView mText;
         TextView mCategory;
         TextView mLocation;
@@ -324,6 +364,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         public MessageViewHolder(View v) {
             super(v);
+            mView = v;
             mText = (TextView) v.findViewById(R.id.item_name);
             mCategory = (TextView) v.findViewById(R.id.item_category);
             mLocation = (TextView) v.findViewById(R.id.item_location);
