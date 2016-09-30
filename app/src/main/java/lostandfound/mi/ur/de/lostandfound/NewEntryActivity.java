@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,7 +77,7 @@ public class NewEntryActivity extends AppCompatActivity {
         list.add("Wallet");
         list.add("Card");
         list.add("Clothing");
-        list.add("Electronic device");
+        list.add("Electronic Device");
         list.add("Jewelry");
 
 
@@ -191,7 +192,6 @@ public class NewEntryActivity extends AppCompatActivity {
 
                 Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Item saved", Snackbar.LENGTH_LONG);
                 snackbar.show();
-                //   Toast.makeText(NewEntryActivity.this, "Item saved!", Toast.LENGTH_LONG).show();
                 finish();
 
             }

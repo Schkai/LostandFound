@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
+    android:layout_height="match_parent"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="lostandfound.mi.ur.de.lostandfound.NewEntryActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        >
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,7 +23,8 @@
             android:id="@+id/post_option_text"
             android:elegantTextHeight="false"
             android:textStyle="bold"
-            android:textAllCaps="true" />
+            android:textAllCaps="true"
+            android:layout_marginTop="10dp"/>
 
 
         <Spinner
@@ -32,6 +33,7 @@
             android:layout_height="wrap_content"
             android:prompt="@string/post_options_prompt"
             android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/colorAccent"
             >
 
         </Spinner>
@@ -51,32 +53,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:maxLength="16"
+            android:maxLength="32"
             android:id="@+id/input_name_edit"
-            android:hint="@string/input_item_name"
+            android:hint="@string/input_item_name_label"
             android:layout_marginBottom="16dp"
             android:imeOptions="actionDone"
             android:maxLines="1"
             android:inputType="textAutoComplete"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/spinner_category_text"
-                android:id="@+id/category_label"
-                android:elegantTextHeight="false"
-                android:textStyle="bold"
-                android:textAllCaps="true" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/spinner_category_text"
+            android:id="@+id/category_label"
+            android:elegantTextHeight="false"
+            android:textStyle="bold"
+            android:textAllCaps="true" />
 
-            <Spinner
-                android:id="@+id/category_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:prompt="@string/post_options_prompt"
-                android:layout_marginBottom="10dp"
-                >
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/post_options_prompt"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/colorAccent"
+            >
 
-            </Spinner>
+        </Spinner>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -93,7 +96,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:id="@+id/input_description_edit"
-            android:hint="@string/input_item_description"
+            android:hint="@string/input_item_description_label"
             android:inputType="textAutoComplete"
             android:maxLines="3"
             android:maxLength="100"
@@ -122,29 +125,29 @@
             android:imeOptions="actionDone"
             android:maxLines="1"
             android:layout_marginBottom="16dp"
-             />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/input_place"
-                android:id="@+id/input_place_text"
-                android:elegantTextHeight="false"
-                android:textStyle="bold"
-                android:textAllCaps="true" />
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/input_place"
+            android:id="@+id/input_place_text"
+            android:elegantTextHeight="false"
+            android:textStyle="bold"
+            android:textAllCaps="true" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:focusable="false"
-                android:hint="@string/input_place"
-                android:inputType="none"
-                android:id="@+id/input_place_edit"
-                android:imeOptions="actionDone"
-                android:maxLines="1"
-                android:layout_marginBottom="16dp"
-                />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="@string/input_item_place_label"
+            android:inputType="none"
+            android:id="@+id/input_place_edit"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:layout_marginBottom="16dp"
+            />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -164,16 +167,23 @@
             android:inputType="text"
             android:maxLength="70"
             android:maxLines="3"
-            android:imeOptions="actionDone"/>
+            android:imeOptions="actionDone"
+            android:layout_marginBottom="20dp"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/button_add"
             android:id="@+id/publish_entry_button"
-            android:layout_marginBottom="16dp"
+            android:layout_gravity="bottom"
+            android:textSize="16sp"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/windowBackground"
             />
-        </LinearLayout>
-    </ScrollView>
 
-</LinearLayout>
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
+

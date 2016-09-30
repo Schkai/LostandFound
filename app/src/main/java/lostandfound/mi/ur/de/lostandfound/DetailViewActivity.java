@@ -47,9 +47,9 @@ public class DetailViewActivity extends AppCompatActivity {
        mNameTxt = (TextView) findViewById(R.id.name_detail_view);
        mCategoryTxt = (TextView) findViewById(R.id.category_detail_view);
        mDescriptionTxt = (TextView) findViewById(R.id.description_detail_view);
-        mDateTxt = (TextView) findViewById(R.id.date_detail_view);
+       mDateTxt = (TextView) findViewById(R.id.date_detail_view);
        mPlaceTxt = (TextView) findViewById(R.id.place_detail_view);
-        mContactTxt = (TextView) findViewById(R.id.contact_detail_view);
+       mContactTxt = (TextView) findViewById(R.id.contact_detail_view);
 
         Typeface face = Typeface.createFromAsset(getAssets(), "fonts/MavenPro-Medium.ttf");
 

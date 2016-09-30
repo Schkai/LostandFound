@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,18 +93,31 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     final DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
 
-
-
-                final FirebaseRecyclerAdapter < LostItem, MessageViewHolder > adapter =
+                 FirebaseRecyclerAdapter < LostItem, MessageViewHolder > adapter =
                         new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
                             @Override
                             protected void populateViewHolder(MessageViewHolder viewHolder, final LostItem model, final int position) {
                                 viewHolder.mText.setText(model.getName());
-                                viewHolder.mCategory.setText(model.getCategory());
+
+                                if (model.getCategory().equals("Key")){
+                                    viewHolder.mCategory.setImageResource(R.drawable.key);
+                                } else if (model.getCategory().equals("Other")) {
+                                    viewHolder.mCategory.setImageResource(R.drawable.help);
+                                } else if(model.getCategory().equals("Wallet")) {
+                                    viewHolder.mCategory.setImageResource(R.drawable.briefcase);
+                                } else if(model.getCategory().equals("Card")){
+                                    viewHolder.mCategory.setImageResource(R.drawable.credit_card);
+                                } else if(model.getCategory().equals("Clothing")){
+                                    viewHolder.mCategory.setImageResource(R.drawable.tshirt_crew);
+                                } else if(model.getCategory().equals("Electronic Device")){
+                                    viewHolder.mCategory.setImageResource(R.drawable.cellphone);
+                                } else if(model.getCategory().equals("Jewelry")){
+                                    viewHolder.mCategory.setImageResource(R.drawable.anchor);
+                                }
+
                                 viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(), model.getLongitude()));
                                 viewHolder.mDate.setText(model.getDate());
                                 Log.d("Mongo", "ich bin populate view und habe" + model.getName() + " " + viewHolder.mText.getText().toString());
-
 
                                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -129,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 Log.d("Tabbug", "getFireBaseData, theFindSpot with Lat: " + theFindSpot.latitude + " long: " + theFindSpot.longitude + " address: " + locationHelper.getAddressString(theFindSpot.latitude, theFindSpot.longitude) + " PLZ: " + locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude));
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-            } else {
+                 } else {
                 Log.d("Tabbug", "Findspot is null");
             }
         }
@@ -325,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView mText;
-        TextView mCategory;
+        ImageView mCategory;
         TextView mLocation;
         TextView mDate;
         View mView;
@@ -334,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             super(v);
             this.mView = v;
             mText = (TextView) v.findViewById(R.id.item_name);
-            mCategory = (TextView) v.findViewById(R.id.item_category);
+            mCategory = (ImageView) v.findViewById(R.id.item_category);
             mLocation = (TextView) v.findViewById(R.id.item_location);
             mDate = (TextView) v.findViewById(R.id.date);
         }

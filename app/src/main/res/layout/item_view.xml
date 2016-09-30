@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:weightSum="3"
     android:layout_height="?android:attr/listPreferredItemHeight">
@@ -62,17 +63,15 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="33dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-
-                android:id="@+id/item_category"
-                android:text="Other"
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:srcCompat="@android:drawable/ic_menu_send"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-
+                android:layout_alignParentEnd="true"
+                android:id="@+id/item_category"
+                />
         </RelativeLayout>
 
 
