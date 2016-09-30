@@ -116,7 +116,7 @@
                 android:id="@+id/name_detail_view"
                 android:elegantTextHeight="false"
                 android:textStyle="bold"
-                android:textAllCaps="true"
+
                 android:layout_margin="20dp"/>
 
             <TextView
@@ -127,7 +127,7 @@
                 android:id="@+id/category_detail_view"
                 android:elegantTextHeight="false"
                 android:textStyle="bold"
-                android:textAllCaps="true"
+
                 android:layout_margin="20dp"/>
 
             <TextView
@@ -139,7 +139,7 @@
                 android:id="@+id/description_detail_view"
                 android:elegantTextHeight="false"
                 android:textStyle="bold"
-                android:textAllCaps="true"
+
                 android:layout_margin="20dp"/>
 
 
@@ -152,7 +152,7 @@
                 android:id="@+id/date_detail_view"
                 android:elegantTextHeight="false"
                 android:textStyle="bold"
-                android:textAllCaps="true"
+
                 android:layout_margin="20dp"/>
 
             <TextView
@@ -163,7 +163,7 @@
                 android:id="@+id/place_detail_view"
                 android:elegantTextHeight="false"
                 android:textStyle="bold"
-                android:textAllCaps="true"
+
                 android:layout_margin="20dp"/>
 
 
