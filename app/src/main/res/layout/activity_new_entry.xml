@@ -189,8 +189,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:hint="@string/captcha_hint"
-                android:inputType="textPostalAddress"
-                android:maxLength="200" />
+                android:inputType="text"
+                android:maxLength="200"
+                android:maxLines="1"/>
 
 
             <Button

@@ -42,9 +42,10 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
     private LocationHelper locationHelper;
     private double latitude;
     private double longitude;
-    private static final String PUBLIC_KEY = "6LdSBQgUAAAAALoW1i3hecAq7RV2erkWf8mwfOo3";
-    private static final String PRIVATE_KEY = "6LdSBQgUAAAAAAo9kbNB8CCNgrWvpojlQNG02Utk";
-
+    //private static final String PUBLIC_KEY = "6LdSBQgUAAAAALoW1i3hecAq7RV2erkWf8mwfOo3";
+    //private static final String PRIVATE_KEY = "6LdSBQgUAAAAAAo9kbNB8CCNgrWvpojlQNG02Utk";
+    private static final String PUBLIC_KEY = "6LekFQgUAAAAAGEbVr16svEp9F-L1_5vS_lo2n7n";
+    private static final String PRIVATE_KEY = "6LekFQgUAAAAAL1Yy04P5FYgomMk8BYW2Qe5r_Wh";
     DatabaseReference db;
     Firebase ref = new Firebase("https://lostandfound-d91c9.firebaseio.com");
 

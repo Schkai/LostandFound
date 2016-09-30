@@ -175,7 +175,7 @@
                 android:id="@+id/contact_detail_view"
                 android:elegantTextHeight="false"
                 android:textStyle="bold"
-                android:textAllCaps="true"
+                android:textIsSelectable="true"
                 android:layout_margin="20dp"/>
 
 
