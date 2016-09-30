@@ -56,13 +56,13 @@ public class LocationHelper {
         }
         return postalCode;
     }
-    public void updatePostalCodeForItem(LostItem item) {
-        String postalCode = "unknown";
+    public String getCityNameFromLatLng(double lat, double lng){
+        String name = "";
 
         List<Address> addresses = null;
 
         try {
-            addresses = geocoder.getFromLocation(item.getLatitude(), item.getLongitude(), 1);
+            addresses = geocoder.getFromLocation(lat, lng, 1);
 
 
         } catch (IOException e) {
@@ -71,10 +71,10 @@ public class LocationHelper {
 
         if (addresses != null && addresses.size() > 0) {
 
-            postalCode = addresses.get(0).getPostalCode();
+            name = addresses.get(0).getLocality();
 
         }
-        item.setPostalCode(postalCode);
+        return name;
     }
 
 }
