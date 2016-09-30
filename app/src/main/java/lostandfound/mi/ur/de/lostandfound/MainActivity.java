@@ -115,8 +115,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                                         break;
                                     case "Purse": viewHolder.mCategory.setImageResource(R.drawable.briefcase);
                                         break;
-                                    case "Wallet": viewHolder.mCategory.setImageResource(R.drawable.briefcase);
-                                        break;
+
                                     case "Card": viewHolder.mCategory.setImageResource(R.drawable.credit_card);
                                         break;
                                     case "Clothing": viewHolder.mCategory.setImageResource(R.drawable.tshirt_crew);
@@ -124,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                                     case "Electronic Device": viewHolder.mCategory.setImageResource(R.drawable.cellphone);
                                         break;
                                     case "Jewelry": viewHolder.mCategory.setImageResource(R.drawable.anchor);
+                                        break;
+                                    case "Wallet": viewHolder.mCategory.setImageResource(R.drawable.briefcase);
                                         break;
                                 }
 
@@ -332,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         String locationName = "items near ";
 
         Log.d("Tabbug", "onLocationChanged, theFindSpot with Lat: "+theFindSpot.latitude+" long: "+ theFindSpot.longitude+ " address: "+locationHelper.getAddressString(theFindSpot.latitude, theFindSpot.longitude)+" PLZ: "+locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude));
-        locationName+=locationHelper.getAddressString(theFindSpot.latitude,theFindSpot.longitude);
+        locationName+=locationHelper.getAddressString(theFindSpot.latitude,theFindSpot.longitude)+" ("+locationHelper.getCityNameFromLatLng(theFindSpot.latitude,theFindSpot.longitude)+")";
         locationBar.setText(locationName);
     }
 
