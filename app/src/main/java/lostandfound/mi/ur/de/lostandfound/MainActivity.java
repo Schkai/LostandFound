@@ -83,29 +83,40 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         }
 
-       private void getFireBaseData(RecyclerView recyclerView, String refChild) {
+       private void getFireBaseData(RecyclerView recyclerView, final String refChild) {
 
             locationBar = (TextView) findViewById(R.id.textView);
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
             String postalCode = "unknown";
              if (theFindSpot != null) {postalCode = locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude);
 
-    DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
-                FirebaseRecyclerAdapter < LostItem, MessageViewHolder > adapter =
+    final DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
+
+
+
+                final FirebaseRecyclerAdapter < LostItem, MessageViewHolder > adapter =
                         new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
                             @Override
-                            protected void populateViewHolder(MessageViewHolder viewHolder, LostItem model, final int position) {
+                            protected void populateViewHolder(MessageViewHolder viewHolder, final LostItem model, final int position) {
                                 viewHolder.mText.setText(model.getName());
                                 viewHolder.mCategory.setText(model.getCategory());
                                 viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(), model.getLongitude()));
                                 viewHolder.mDate.setText(model.getDate());
                                 Log.d("Mongo", "ich bin populate view und habe" + model.getName() + " " + viewHolder.mText.getText().toString());
 
+
                                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         Log.d("Tabbug", "You clicked on position " + position);
                                         Intent detailIntent = new Intent(view.getContext(), DetailViewActivity.class);
+                                        detailIntent.putExtra("itemName", model.getName());
+                                        detailIntent.putExtra("itemCategory", model.getCategory());
+                                        detailIntent.putExtra("itemDescription", model.getDescription());
+                                        detailIntent.putExtra("itemContact", model.getContact());
+                                        detailIntent.putExtra("itemDate", model.getDate());
+                                        detailIntent.putExtra("itemLatitude", model.getLatitude());
+                                        detailIntent.putExtra("itemLongitude", model.getLongitude());
                                         startActivity(detailIntent);
                                     }
                                 });

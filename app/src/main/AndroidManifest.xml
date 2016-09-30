@@ -36,6 +36,10 @@
         </activity>
 
         <activity android:name=".DetailViewActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lostandfound.mi.ur.de.lostandfound.MainActivity" />
+
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

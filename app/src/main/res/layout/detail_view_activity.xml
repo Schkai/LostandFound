@@ -6,14 +6,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="lostandfound.mi.ur.de.lostandfound.NewEntryActivity"
-    android:orientation="vertical">
+    android:orientation="horizontal">
+
+
 
     <ScrollView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
 
@@ -21,8 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/input_item_name"
-                android:id="@+id/input_name_text"
+                android:text="Name"
+                android:id="@+id/name_detail_view_label"
                 android:elegantTextHeight="false"
                 android:textStyle="bold"
                 android:textAllCaps="true"
@@ -32,8 +34,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/spinner_category_text"
-                android:id="@+id/category_label"
+                android:text="Category"
+                android:id="@+id/category_detail_view_label"
                 android:elegantTextHeight="false"
                 android:textStyle="bold"
                 android:textAllCaps="true"
@@ -43,9 +45,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/input_item_description"
+                android:text="Description"
                 android:maxLines="1"
-                android:id="@+id/input_contact_text_"
+                android:id="@+id/description_detail_view_label"
                 android:elegantTextHeight="false"
                 android:textStyle="bold"
                 android:textAllCaps="true"
@@ -58,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/input_date"
-                android:id="@+id/input_date_text"
+                android:id="@+id/date_detail_view_label"
                 android:elegantTextHeight="false"
                 android:textStyle="bold"
                 android:textAllCaps="true"
@@ -69,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/input_place"
-                android:id="@+id/input_place_text"
+                android:id="@+id/place_detail_view_label"
                 android:elegantTextHeight="false"
                 android:textStyle="bold"
                 android:textAllCaps="true"
@@ -81,22 +83,105 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/input_contact"
-                android:id="@+id/input_contact_text_label"
+                android:id="@+id/contact_detail_view_label"
                 android:elegantTextHeight="false"
                 android:textStyle="bold"
                 android:textAllCaps="true"
                 android:layout_margin="20dp"/>
 
 
-            <Button
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/spam_button"
-                android:id="@+id/mark_as_spam_button"
-                android:layout_marginBottom="16dp"
-                />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Name"
+                android:id="@+id/name_detail_view"
+                android:elegantTextHeight="false"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_margin="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/spinner_category_text"
+                android:id="@+id/category_detail_view"
+                android:elegantTextHeight="false"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_margin="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Description"
+                android:maxLines="1"
+                android:id="@+id/description_detail_view"
+                android:elegantTextHeight="false"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_margin="20dp"/>
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/input_date"
+                android:id="@+id/date_detail_view"
+                android:elegantTextHeight="false"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_margin="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/input_place"
+                android:id="@+id/place_detail_view"
+                android:elegantTextHeight="false"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_margin="20dp"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/input_contact"
+                android:id="@+id/contact_detail_view"
+                android:elegantTextHeight="false"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_margin="20dp"/>
+
 
         </LinearLayout>
     </ScrollView>
 
 </LinearLayout>
+
+
+
+
