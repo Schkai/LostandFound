@@ -34,22 +34,19 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
 
-    private TabHost tabHost;
-    private FloatingActionButton addEntryButton;
-    private Button setLocButton;
-
 
     public static final int DETAIL_REQUEST = 2;
     public static final int MAP_REQUEST = 1;
     public static final int NEW_ENTRY_REQUEST = 0;
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    protected TextView locationBar;
-    private GoogleApiClient mGoogleApiClient;
     protected static Location mLastLocation;
     private LatLng theFindSpot;
+
+    private GoogleApiClient mGoogleApiClient;
     private LocationHelper locationHelper;
 
+    protected TextView locationBar;
     private RecyclerView lostListView;
     private RecyclerView foundListView;
 
@@ -92,84 +89,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
      * @param refChild
      */
 
-    private void getFireBaseData(RecyclerView recyclerView, final String refChild) {
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        String postalCode = "unknown";
-        if (theFindSpot != null) {
-            postalCode = locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude);
-
-            final DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
-
-            FirebaseRecyclerAdapter<LostItem, MessageViewHolder> adapter =
-                    new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
-                        @Override
-                        protected void populateViewHolder(MessageViewHolder viewHolder, final LostItem model, final int position) {
-                            viewHolder.mText.setText(model.getName());
-
-                            String modelCategory = model.getCategory();
-
-                            switch (modelCategory) {
-                                case "Key":
-                                    viewHolder.mCategory.setImageResource(R.drawable.key);
-                                    break;
-                                case "Other":
-                                    viewHolder.mCategory.setImageResource(R.drawable.help);
-                                    break;
-                                case "Purse":
-                                    viewHolder.mCategory.setImageResource(R.drawable.briefcase);
-                                    break;
-
-                                case "Card":
-                                    viewHolder.mCategory.setImageResource(R.drawable.credit_card);
-                                    break;
-                                case "Clothing":
-                                    viewHolder.mCategory.setImageResource(R.drawable.tshirt_crew);
-                                    break;
-                                case "Electronic Device":
-                                    viewHolder.mCategory.setImageResource(R.drawable.cellphone);
-                                    break;
-                                case "Jewelry":
-                                    viewHolder.mCategory.setImageResource(R.drawable.anchor);
-                                    break;
-                                case "Wallet":
-                                    viewHolder.mCategory.setImageResource(R.drawable.briefcase);
-                                    break;
-                            }
-
-                            viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(), model.getLongitude()));
-                            viewHolder.mDate.setText(model.getDate());
-                            Log.d("Mongo", "ich bin populate view und habe" + model.getName() + " " + viewHolder.mText.getText().toString());
-
-                            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-
-
-                                    Log.d("Tabbug", "You clicked on position " + position);
-                                    Intent detailIntent = new Intent(view.getContext(), DetailViewActivity.class);
-                                    detailIntent.putExtra("itemName", model.getName());
-                                    detailIntent.putExtra("itemCategory", model.getCategory());
-                                    detailIntent.putExtra("itemDescription", model.getDescription());
-                                    detailIntent.putExtra("itemContact", model.getContact());
-                                    detailIntent.putExtra("itemDate", model.getDate());
-                                    detailIntent.putExtra("itemLatitude", model.getLatitude());
-                                    detailIntent.putExtra("itemLongitude", model.getLongitude());
-                                    detailIntent.putExtra("last_loc", theFindSpot);
-                                    startActivityForResult(detailIntent, DETAIL_REQUEST);
-                                }
-                            });
-
-                        }
-                    };
-
-            recyclerView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-
-        } else {
-            Log.d("Tabbug", "Findspot is null");
-        }
-    }
 
     /**
      * Builds a GoogleApiClient. Uses the addApi() method to request the LocationServices API.
@@ -187,8 +107,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
      */
 
     private void initButtons() {
-        addEntryButton = (FloatingActionButton) findViewById(R.id.new_entry_button);
-        setLocButton = (Button) findViewById(R.id.set_loc_button);
+        FloatingActionButton addEntryButton = (FloatingActionButton) findViewById(R.id.new_entry_button);
+        Button setLocButton = (Button) findViewById(R.id.set_loc_button);
 
         addEntryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,8 +126,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
     /**
-     * When the phone is not able to get the current position, we can manually set our position
-     * in a new activity with a google maps map.
+     * We can manually set our position in a new activity with a google maps map.
      */
     private void openMapsActivity() {
 
@@ -239,9 +158,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             locationUnknown = true;
         }
+
         i.putExtra("loc_unknown", locationUnknown);
-
-
         startActivityForResult(i, NEW_ENTRY_REQUEST);
     }
 
@@ -251,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
      */
     private void initTabs() {
 
-        tabHost = (TabHost) findViewById(R.id.tabHost);
+        TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
         tabHost.setup();
 
         TabHost.TabSpec tabSpec = tabHost.newTabSpec("lost");
@@ -332,7 +250,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             }
         }
     }
-    //updates firebase data and builds new string for the location bar
+    /**
+     * updates the fire base data and the location bar
+     */
     private void onLocationChanged() {
         getFireBaseData(foundListView, "FoundItem");
         getFireBaseData(lostListView, "LostItem");
@@ -349,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         if (!Objects.equals(city, "")) {
             locationText += " (" + locationHelper.getCityNameFromLatLng(theFindSpot.latitude, theFindSpot.longitude) + ")";
         }
-        if(Objects.equals(locationText, "Items near ")){locationText="unknown location";}
+        if(Objects.equals(locationText, "Items near ")){locationText="Unknown location";}
 
         locationBar.setText(locationText);
     }
@@ -406,7 +326,84 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             mDate = (TextView) v.findViewById(R.id.date);
         }
     }
+    private void getFireBaseData(RecyclerView recyclerView, final String refChild) {
 
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        String postalCode = "unknown";
+        if (theFindSpot != null) {
+            postalCode = locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude);
+
+            final DatabaseReference lostRef = ref.child(refChild).child(postalCode.toString());
+
+            FirebaseRecyclerAdapter<LostItem, MessageViewHolder> adapter =
+                    new FirebaseRecyclerAdapter<LostItem, MessageViewHolder>(LostItem.class, R.layout.item_view, MessageViewHolder.class, lostRef) {
+                        @Override
+                        protected void populateViewHolder(MessageViewHolder viewHolder, final LostItem model, final int position) {
+                            viewHolder.mText.setText(model.getName());
+
+                            String modelCategory = model.getCategory();
+
+                            switch (modelCategory) {
+                                case "Key":
+                                    viewHolder.mCategory.setImageResource(R.drawable.key);
+                                    break;
+                                case "Other":
+                                    viewHolder.mCategory.setImageResource(R.drawable.help);
+                                    break;
+                                case "Purse":
+                                    viewHolder.mCategory.setImageResource(R.drawable.briefcase);
+                                    break;
+
+                                case "Card":
+                                    viewHolder.mCategory.setImageResource(R.drawable.credit_card);
+                                    break;
+                                case "Clothing":
+                                    viewHolder.mCategory.setImageResource(R.drawable.tshirt_crew);
+                                    break;
+                                case "Electronic Device":
+                                    viewHolder.mCategory.setImageResource(R.drawable.cellphone);
+                                    break;
+                                case "Jewelry":
+                                    viewHolder.mCategory.setImageResource(R.drawable.anchor);
+                                    break;
+                                case "Wallet":
+                                    viewHolder.mCategory.setImageResource(R.drawable.briefcase);
+                                    break;
+                            }
+
+                            viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(), model.getLongitude()));
+                            viewHolder.mDate.setText(model.getDate());
+                            Log.d("Mongo", "ich bin populate view und habe" + model.getName() + " " + viewHolder.mText.getText().toString());
+
+                            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+
+                                    Log.d("Tabbug", "You clicked on position " + position);
+                                    Intent detailIntent = new Intent(view.getContext(), DetailViewActivity.class);
+                                    detailIntent.putExtra("itemName", model.getName());
+                                    detailIntent.putExtra("itemCategory", model.getCategory());
+                                    detailIntent.putExtra("itemDescription", model.getDescription());
+                                    detailIntent.putExtra("itemContact", model.getContact());
+                                    detailIntent.putExtra("itemDate", model.getDate());
+                                    detailIntent.putExtra("itemLatitude", model.getLatitude());
+                                    detailIntent.putExtra("itemLongitude", model.getLongitude());
+                                    detailIntent.putExtra("last_loc", theFindSpot);
+                                    startActivityForResult(detailIntent, DETAIL_REQUEST);
+                                }
+                            });
+
+                        }
+                    };
+
+            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+        } else {
+            Log.d("Tabbug", "Findspot is null");
+        }
+    }
 
 }
 
