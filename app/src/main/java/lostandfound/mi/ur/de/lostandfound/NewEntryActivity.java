@@ -7,7 +7,6 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -262,13 +261,15 @@ public class NewEntryActivity extends AppCompatActivity {
 
         switch (mi.getItemId()) {
             case android.R.id.home:
-                if (latitude != 0 && longitude != 0) {
+                /*if (latitude != 0 && longitude != 0) {
                     setResult(Activity.RESULT_OK,
                             new Intent().putExtra("latitude", latitude).putExtra("longitude", longitude));
                     finish();
                 } else {
                     NavUtils.navigateUpFromSameTask(this);
-                }
+                }*/
+                onBackPressed();
+                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(mi);
