@@ -18,9 +18,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Objects;
 
-/**
- * Created by Konstantin on 29.09.2016.
- */
+
 
 public class DetailViewActivity extends AppCompatActivity implements OnMapReadyCallback {
 

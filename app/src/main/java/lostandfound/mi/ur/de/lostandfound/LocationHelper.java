@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Alexander on 23.09.2016.
- */
+
 
 public class LocationHelper {
 

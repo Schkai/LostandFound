@@ -9,9 +9,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by Alexander on 28.08.2016.
- */
+
 public class ItemArrayAdapter  extends ArrayAdapter<LostItem> {private ArrayList<LostItem> items;
     private Context context;
     private LostItem item;

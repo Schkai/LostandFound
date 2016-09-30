@@ -4,9 +4,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-/**
- * Created by Konstantin on 22.09.2016.
- */
+
 
 public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
     @Override

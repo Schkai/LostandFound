@@ -6,9 +6,7 @@ import android.widget.TextView;
 
 import lostandfound.mi.ur.de.lostandfound.R;
 
-/**
- * Created by Konstantin on 21.09.2016.
- */
+
 public class MyViewHolder extends RecyclerView.ViewHolder{
 
     TextView nameTxt, descTxt, contentTxt;

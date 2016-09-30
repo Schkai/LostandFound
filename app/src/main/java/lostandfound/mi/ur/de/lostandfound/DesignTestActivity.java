@@ -15,9 +15,7 @@ import java.util.List;
 import lostandfound.mi.ur.de.lostandfound.fragments.FoundFragment;
 import lostandfound.mi.ur.de.lostandfound.fragments.LostFragment;
 
-/**
- * Created by Konstantin on 26.09.2016.
- */
+
 
 public class DesignTestActivity extends AppCompatActivity {
 

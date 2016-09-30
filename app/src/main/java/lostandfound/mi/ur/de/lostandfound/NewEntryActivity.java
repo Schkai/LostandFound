@@ -31,9 +31,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Alexander on 31.08.2016.
- */
 public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnShowChallengeListener, ReCaptcha.OnVerifyAnswerListener {
 
     private Spinner lfSpinner;

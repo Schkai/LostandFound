@@ -8,9 +8,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by Alexander on 21.09.2016.
- */
+
 
 public class JSONtoObjectConverter extends ArrayList<LostItem>{ private static final String NAME = "name";
     private static final String DATE = "date";

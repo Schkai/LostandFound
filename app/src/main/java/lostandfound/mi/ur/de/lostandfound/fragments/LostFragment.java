@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 
 import lostandfound.mi.ur.de.lostandfound.R;
 
-/**
- * Created by Konstantin on 27.09.2016.
- */
+
 
 public class LostFragment extends Fragment {
 

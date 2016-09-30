@@ -1,8 +1,6 @@
 package lostandfound.mi.ur.de.lostandfound;
 
-/**
- * Created by Konstantin on 21.09.2016.
- */
+
 
 public class  FoundItem {
 
