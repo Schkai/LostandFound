@@ -7,11 +7,13 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="lostandfound.mi.ur.de.lostandfound.MainActivity"
     android:orientation="vertical"
-    android:weightSum="12">
+    android:weightSum="12"
+    android:background="@color/background_white">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryLight"
+    android:background="@color/colorPrimaryLight">
+
     >
     <TextView
         android:layout_width="match_parent"
@@ -21,18 +23,19 @@
         android:text="@string/location_default_location"
         android:id="@+id/textView"
         android:layout_weight="3"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_alignParentTop="true"/>
-</RelativeLayout>
+
 
     <TabHost
         android:id="@+id/tabHost"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="8"
-        android:layout_marginTop="30dp"
+        android:layout_below="@+id/textView"
+
 
 
         >
@@ -41,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:background="@color/background_white"
 
             >
 
@@ -96,7 +100,7 @@
         </LinearLayout>
 
     </TabHost>
-
+</RelativeLayout>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/new_entry_button"
         android:layout_width="wrap_content"

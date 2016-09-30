@@ -3,8 +3,6 @@ package lostandfound.mi.ur.de.lostandfound;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.MenuItem;
@@ -17,6 +15,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.Objects;
 
 /**
  * Created by Konstantin on 29.09.2016.
@@ -99,8 +99,11 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         contact = getIntent().getExtras().getString("itemContact");
         double lat =getIntent().getExtras().getDouble("itemLatitude");
         double lng = getIntent().getExtras().getDouble("itemLongitude");
+
         placeLatLng= new LatLng(lat,lng);
         place = mLocHelper.getAddressString(lat,lng);
+        String city=mLocHelper.getCityNameFromLatLng(lat, lng);
+        if (!Objects.equals(city, "")){place+=" ("+city+")";}
 
     }
 
