@@ -20,7 +20,7 @@
         android:background="@color/colorPrimaryLight"
         android:text="@string/location_default_location"
         android:id="@+id/textView"
-        android:layout_weight="0.4"
+        android:layout_weight="0.6"
         />
 
 
@@ -30,6 +30,7 @@
         android:layout_height="match_parent"
         android:layout_weight="8"
         android:layout_marginTop="20dp"
+
         >
 
         <LinearLayout
@@ -40,7 +41,10 @@
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+
+                >
 
             </TabWidget>
 
@@ -83,6 +87,17 @@
         </LinearLayout>
     </TabHost>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/new_entry_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@android:drawable/ic_input_add"
+        app:rippleColor="?attr/colorBackgroundFloating"
+        app:backgroundTint="?attr/actionModeSplitBackground"
+        app:borderWidth="0dp"
+        />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -94,28 +109,23 @@
 
 
         <Button
-            android:layout_width="match_parent"
+            android:layout_width="196dp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/change_location"
+            android:textSize="20sp"
             android:id="@+id/set_loc_button"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_weight="0.50"
+            style="@style/Widget.AppCompat.Button"
 
             />
 
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/new_entry"
-            android:id="@+id/new_entry_button"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
 
-            android:layout_weight="0.50" />
+
 
 
     </LinearLayout>
+
 
 
 </android.support.design.widget.CoordinatorLayout>

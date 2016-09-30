@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +39,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
 
     private TabHost tabHost;
-    private Button addEntryButton;
+    private FloatingActionButton addEntryButton;
     private Button setLocButton;
 
 
@@ -110,20 +112,23 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                             protected void populateViewHolder(MessageViewHolder viewHolder, final LostItem model, final int position) {
                                 viewHolder.mText.setText(model.getName());
 
-                                if (model.getCategory().equals("Key")){
-                                    viewHolder.mCategory.setImageResource(R.drawable.key);
-                                } else if (model.getCategory().equals("Other")) {
-                                    viewHolder.mCategory.setImageResource(R.drawable.help);
-                                } else if(model.getCategory().equals("Wallet")) {
-                                    viewHolder.mCategory.setImageResource(R.drawable.briefcase);
-                                } else if(model.getCategory().equals("Card")){
-                                    viewHolder.mCategory.setImageResource(R.drawable.credit_card);
-                                } else if(model.getCategory().equals("Clothing")){
-                                    viewHolder.mCategory.setImageResource(R.drawable.tshirt_crew);
-                                } else if(model.getCategory().equals("Electronic Device")){
-                                    viewHolder.mCategory.setImageResource(R.drawable.cellphone);
-                                } else if(model.getCategory().equals("Jewelry")){
-                                    viewHolder.mCategory.setImageResource(R.drawable.anchor);
+                                String modelCategory = model.getCategory();
+
+                                switch (modelCategory) {
+                                    case "Key": viewHolder.mCategory.setImageResource(R.drawable.key);
+                                        break;
+                                    case "Other": viewHolder.mCategory.setImageResource(R.drawable.help);
+                                        break;
+                                    case "Wallet": viewHolder.mCategory.setImageResource(R.drawable.briefcase);
+                                        break;
+                                    case "Card": viewHolder.mCategory.setImageResource(R.drawable.credit_card);
+                                        break;
+                                    case "Clothing": viewHolder.mCategory.setImageResource(R.drawable.tshirt_crew);
+                                        break;
+                                    case "Electronic Device": viewHolder.mCategory.setImageResource(R.drawable.cellphone);
+                                        break;
+                                    case "Jewelry": viewHolder.mCategory.setImageResource(R.drawable.anchor);
+                                        break;
                                 }
 
                                 viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(), model.getLongitude()));
@@ -175,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
      */
 
     private void initButtons() {
-        addEntryButton = (Button) findViewById(R.id.new_entry_button);
+        addEntryButton = (FloatingActionButton) findViewById(R.id.new_entry_button);
         setLocButton = (Button) findViewById(R.id.set_loc_button);
 
         addEntryButton.setOnClickListener(new View.OnClickListener() {
