@@ -4,6 +4,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -20,7 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Created by Konstantin on 29.09.2016.
  */
 
-public class DetailViewActivity extends FragmentActivity implements OnMapReadyCallback {
+public class DetailViewActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private TextView mNameTxt;
     private TextView mCategoryTxt;
@@ -45,7 +47,7 @@ public class DetailViewActivity extends FragmentActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_view_activity);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mLocHelper = new LocationHelper(this);
         initTextViews();
         getIntents();

@@ -11,7 +11,8 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryLight">
+    android:background="@color/colorPrimaryLight"
+    >
     <TextView
         android:layout_width="match_parent"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -20,9 +21,10 @@
         android:text="@string/location_default_location"
         android:id="@+id/textView"
         android:layout_weight="3"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginRight="5dp"
+        android:layout_alignParentTop="true"/>
 </RelativeLayout>
 
     <TabHost
@@ -31,6 +33,7 @@
         android:layout_height="match_parent"
         android:layout_weight="8"
         android:layout_marginTop="30dp"
+
 
         >
 
@@ -91,6 +94,7 @@
 
             </FrameLayout>
         </LinearLayout>
+
     </TabHost>
 
     <android.support.design.widget.FloatingActionButton
@@ -98,18 +102,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:src="@android:drawable/ic_input_add"
-        app:rippleColor="?attr/colorBackgroundFloating"
-        app:backgroundTint="?attr/actionModeSplitBackground"
+        android:src="@drawable/plus"
         app:borderWidth="0dp"
-        />
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+
+         />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:weightSum="1"
+        android:layout_marginTop="15dp"
         android:gravity="bottom"
         android:layout_gravity="bottom|center_horizontal">
 
@@ -120,18 +125,16 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/change_location"
             android:textSize="20sp"
+            android:textColor="@color/textColorPrimary"
             android:id="@+id/set_loc_button"
-            style="@style/Widget.AppCompat.Button"
-
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="5dp"
             />
 
 
-
-
-
-
     </LinearLayout>
-
 
 
 </android.support.design.widget.CoordinatorLayout>
