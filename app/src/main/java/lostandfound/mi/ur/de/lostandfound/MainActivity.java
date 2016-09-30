@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
 
     private TabHost tabHost;
-    private Button addEntryButton;
+    private FloatingActionButton addEntryButton;
     private Button setLocButton;
 
 
@@ -179,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
      */
 
     private void initButtons() {
-        addEntryButton = (Button) findViewById(R.id.new_entry_button);
+        addEntryButton = (FloatingActionButton) findViewById(R.id.new_entry_button);
         setLocButton = (Button) findViewById(R.id.set_loc_button);
 
         addEntryButton.setOnClickListener(new View.OnClickListener() {

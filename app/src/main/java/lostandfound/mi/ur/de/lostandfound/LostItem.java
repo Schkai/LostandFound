@@ -3,7 +3,7 @@ package lostandfound.mi.ur.de.lostandfound;
 /**
  * Created by Alexander on 28.08.2016.
  */
-public class LostItem {
+public  class LostItem {
     private String name;
     private String date;
     private double longitude;
