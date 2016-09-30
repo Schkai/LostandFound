@@ -75,6 +75,9 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
         showChallenge();
     }
 
+    /**
+     * Material Spinner used for picking a category of the item which was lost our found
+     */
 
     private void initCategorySpinner() {
         categorySpinner = (Spinner) findViewById(R.id.category_spinner);
@@ -95,6 +98,12 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
 
 
     }
+
+    /**
+     * Since the MainActivity provides this activity with the current location, it will automatically
+     * fill the respective entry. If there is no entry, a google maps activity will be opened for the
+     * user to select the location of the lost or found item
+     */
 
     private void initPlaceInputField() {
         placeEdit = (EditText) findViewById(R.id.input_place_edit);
@@ -147,6 +156,10 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
         }
     }
 
+    /**
+     * Spinner used for choosing whether the item is lost or found
+     */
+
     private void initlfSpinner() {
         lfSpinner = (Spinner) findViewById(R.id.post_option_spinner);
 
@@ -164,14 +177,21 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
 
     }
 
+
+    /**
+     * Custom Sspinner behavior
+     * @param spinner
+     */
+
     private void addListenerOnSpinnerItemSelected(Spinner spinner) {
         spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
 
 
     /**
-     * DO NOT (!!!) delete the .toString() in the child query even though android studio won't shut up about it being redundant!
-     * Just don't do it! It will fuck up the whole database!
+     * This method pushes the new entry to their respective child nodes in the database.
+     * DO NOT (!!!) delete the .toString() in the child query even though android studio won't
+     * shut up about it being redundant! Just don't do it! It will fuck up the whole database structure!
      */
 
     private void initPublishEntryButton() {
@@ -197,7 +217,6 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
 
                     }
 
-
                     Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Item saved", Snackbar.LENGTH_LONG);
                     snackbar.show();
                     finish();
@@ -206,6 +225,11 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
             }
         });
     }
+
+    /**
+     * Create a new item for initPublishEntryButton to push to database.
+     * @return item
+     */
 
     private LostItem createItemFromInput() {
 
@@ -286,7 +310,10 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
     }
 
 
-    //DateDialogue
+    /**
+     * Pick the date with a beautiful date picker.
+     */
+
     public static class DatePickFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @Override
@@ -311,6 +338,10 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
             tv.setText(date);
         }
     }
+
+    /**
+     * Captcha for spam protection
+     */
 
     private void initCaptcha() {
         reCaptcha = (ReCaptcha) findViewById(R.id.recaptcha);

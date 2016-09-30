@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,29 +36,22 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
 
-    private ArrayList<LostItem> itemsMissing;
-    private ArrayAdapter<String> lostAdapter;
-    private ArrayList<LostItem> itemsFound;
-   // private ItemArrayAdapter adapter;
     private TabHost tabHost;
     private Button addEntryButton;
     private Button setLocButton;
+
 
     public static final int DETAIL_REQUEST = 2;
     public static final int MAP_REQUEST = 1;
     public static final int NEW_ENTRY_REQUEST = 0;
     private static final String TAG = MainActivity.class.getSimpleName();
+
     protected TextView locationBar;
-
-
     private GoogleApiClient mGoogleApiClient;
     protected static Location mLastLocation;
     private LatLng theFindSpot;
-
-
     private LocationHelper locationHelper;
 
-    //FIREBASE --------------
     private RecyclerView lostListView;
     private RecyclerView foundListView;
 
@@ -76,14 +71,30 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         initLists();
         initTabs();
 
-
-
     }
-        private void initBars () {
+
+
+    /**
+     * Set our location bar where the current location will be displayed
+     */
+
+    private void initBars () {
             locationBar = (TextView) findViewById(R.id.textView);
             getSupportActionBar().hide();
 
         }
+
+    /**
+     *
+     * This is the heart of the recyclerView. This method automatically loads and populates the
+     * recyclerView while connecting to the node child in our database which is the postalCode
+     * of the user's current position. The Adapter fetches and refreshes data in realtime.
+     * Problem: NestedScrollView in layout.xml doesn't show any entries, using a LinearLayout is
+     * very slow as it loads data one at a time. We had to make a compromiss in the short time span.
+     *
+     * @param recyclerView
+     * @param refChild
+     */
 
        private void getFireBaseData(RecyclerView recyclerView, final String refChild) {
 
@@ -159,6 +170,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 .build();
     }
 
+    /**
+     * Initialization of our Buttons.
+     */
+
     private void initButtons() {
         addEntryButton = (Button) findViewById(R.id.new_entry_button);
         setLocButton = (Button) findViewById(R.id.set_loc_button);
@@ -177,6 +192,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         });
     }
 
+
+    /**
+     * When the phone is not able to get the current position, we can manually set our position
+     * in a new activity with a google maps map.
+     *
+     */
     private void openMapsActivity() {
 
         Intent i = new Intent(this, MapsActivity.class);
@@ -192,9 +213,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         startActivityForResult(i, MAP_REQUEST);
     }
 
+
     /**
-     * Enters DesignTestActivity for layout testing purposes!
-     * TODO: Change back to NewEntryActivity after new layout is finished!
+     * Opens the NewEntryActivity which allows the user to post lost and found items.
+     * Also, the current location will be provided for the class to use.
      */
 
     private void openNewEntryActivity() {
@@ -214,6 +236,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         startActivityForResult(i,NEW_ENTRY_REQUEST);
     }
 
+
+    /**
+     * Initialization of both tabs.
+     */
     private void initTabs() {
 
         tabHost = (TabHost) findViewById(R.id.tabHost);
@@ -231,6 +257,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
 
+    /**
+     * Initialization of both recyclerViews used for the lost and found tabs
+     */
 
     private void initLists() {
         lostListView = (RecyclerView) findViewById(R.id.lost_list);
@@ -257,6 +286,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     /**
      * Runs when a GoogleApiClient object successfully connects.
+     * Gets the user's current location and updates it when being changed.
      */
 
     @Override
@@ -336,6 +366,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             onLocationChanged();
         }
     }
+
+    /**
+     * Class needed for the firebaserecycleradapter to correctly populate recyclerviews.
+     */
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView mText;

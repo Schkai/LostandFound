@@ -42,6 +42,10 @@ public class DetailViewActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Initialize TextViews with custom typeface
+     */
+
     private void initTextViews() {
 
        mNameTxt = (TextView) findViewById(R.id.name_detail_view);
@@ -62,6 +66,10 @@ public class DetailViewActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Gets intent from respective RecyclerView Entry
+     */
+
     private void getIntents(){
         name = getIntent().getExtras().getString("itemName");
         category  = getIntent().getExtras().getString("itemCategory");
@@ -69,6 +77,10 @@ public class DetailViewActivity extends AppCompatActivity {
         date = getIntent().getExtras().getString("itemDate");
         contact = getIntent().getExtras().getString("itemContact");
     }
+
+    /**
+     * Set the Textviews content
+     */
 
     private void populateTextViews() {
         mNameTxt.setText(name);
@@ -78,6 +90,7 @@ public class DetailViewActivity extends AppCompatActivity {
         mContactTxt.setText(contact);
         checkPhoneNumber(mContactTxt.toString());
     }
+
 
 
     private void checkPhoneNumber(CharSequence number) {
