@@ -33,7 +33,8 @@
     <string name="list_item_nested_textview">Have you lost or found something?</string>
     <string name="spinner_category_text">Category</string>
     <string name="spam_button">Mark as Spam</string>
-    <string name="captcha_hint">Enter the upper chars</string>
+    <string name="captcha_hint">Enter upper chars</string>
+    <string name="captcha_label">Validation</string>
 
 
     <string-array name="post_options_array">

@@ -53,6 +53,7 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
     private boolean captchaSolved;
     private EditText captchaInput;
     private Button verify;
+    private Button reloadButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,7 +222,8 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
                     Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Item saved", Snackbar.LENGTH_LONG);
                     snackbar.show();
                     finish();
-                }else{Toast.makeText(NewEntryActivity.this, "Please enter the captcha code", Toast.LENGTH_SHORT).show();}
+                }else{Toast.makeText(NewEntryActivity.this, "Please enter the captcha code", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -353,7 +355,7 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
         verify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (captchaInput.getText().equals("")) {
+                if (captchaInput.getText().toString().equals("")) {
                     Toast.makeText(NewEntryActivity.this, "Please enter the upper code", Toast.LENGTH_SHORT).show();
 
                 } else {
@@ -362,6 +364,16 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
                 }
             }
         });
+
+        reloadButton =(Button)findViewById(R.id.reload_button);
+        reloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showChallenge();
+            }
+        });
+
+
 
     }
 
@@ -383,9 +395,12 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
             reCaptcha.setVisibility(View.INVISIBLE);
             captchaInput.setVisibility(View.INVISIBLE);
             verify.setVisibility(View.INVISIBLE);
+            reloadButton.setVisibility(View.INVISIBLE);
 
         } else {
             Toast.makeText(this, "You entered the wrong code", Toast.LENGTH_SHORT).show();
+            captchaInput.setText("");
+            showChallenge();
         }
 
     }
