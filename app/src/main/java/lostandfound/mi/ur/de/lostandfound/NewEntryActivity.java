@@ -75,6 +75,9 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
 
 
         showChallenge();
+
+
+
     }
 
     /**
@@ -87,7 +90,7 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
 
         list.add("Other");
         list.add("Key");
-        list.add("Wallet");
+        list.add("Purse");
         list.add("Card");
         list.add("Clothing");
         list.add("Electronic Device");
@@ -380,10 +383,9 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
     @Override
     public void onChallengeShown(boolean shown) {
 
-
         if (shown) {
 
-            this.reCaptcha.setVisibility(View.VISIBLE);
+            reCaptcha.setVisibility(View.VISIBLE);
         }
     }
 
@@ -406,10 +408,10 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
     }
 
     private void showChallenge() {
-        this.reCaptcha.setVisibility(View.GONE);
+        reCaptcha.setVisibility(View.GONE);
 
-        this.reCaptcha.setLanguageCode("en");
-        this.reCaptcha.showChallengeAsync(PUBLIC_KEY, this);
+        reCaptcha.setLanguageCode("en");
+        reCaptcha.showChallengeAsync(PUBLIC_KEY, this);
     }
 
 }

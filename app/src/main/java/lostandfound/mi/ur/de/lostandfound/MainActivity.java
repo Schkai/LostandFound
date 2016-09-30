@@ -11,13 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +28,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener {
@@ -118,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                                     case "Key": viewHolder.mCategory.setImageResource(R.drawable.key);
                                         break;
                                     case "Other": viewHolder.mCategory.setImageResource(R.drawable.help);
+                                        break;
+                                    case "Purse": viewHolder.mCategory.setImageResource(R.drawable.briefcase);
                                         break;
                                     case "Wallet": viewHolder.mCategory.setImageResource(R.drawable.briefcase);
                                         break;

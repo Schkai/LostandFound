@@ -3,16 +3,24 @@ package lostandfound.mi.ur.de.lostandfound;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Created by Konstantin on 29.09.2016.
  */
 
-public class DetailViewActivity extends AppCompatActivity {
+public class DetailViewActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private TextView mNameTxt;
     private TextView mCategoryTxt;
@@ -26,19 +34,30 @@ public class DetailViewActivity extends AppCompatActivity {
     private String description;
     private String date;
     private String place;
+    private LatLng placeLatLng;
     private String contact;
-
+    private GoogleMap mMap;
+    private Marker marker;
+    private LocationHelper mLocHelper;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_view_activity);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mLocHelper = new LocationHelper(this);
         initTextViews();
         getIntents();
         populateTextViews();
+
+
+
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.detail_map);
+        mapFragment.getMapAsync(this);
 
     }
 
@@ -76,6 +95,11 @@ public class DetailViewActivity extends AppCompatActivity {
         description = getIntent().getExtras().getString("itemDescription");
         date = getIntent().getExtras().getString("itemDate");
         contact = getIntent().getExtras().getString("itemContact");
+        double lat =getIntent().getExtras().getDouble("itemLatitude");
+        double lng = getIntent().getExtras().getDouble("itemLongitude");
+        placeLatLng= new LatLng(lat,lng);
+        place = mLocHelper.getAddressString(lat,lng);
+
     }
 
     /**
@@ -88,6 +112,7 @@ public class DetailViewActivity extends AppCompatActivity {
         mDescriptionTxt.setText(description);
         mDateTxt.setText(date);
         mContactTxt.setText(contact);
+        mPlaceTxt.setText(place);
         checkPhoneNumber(mContactTxt.toString());
     }
 
@@ -122,6 +147,21 @@ public class DetailViewActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(mi);
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {mMap = googleMap;
+setupMarker();
+    }
+
+    private void setupMarker() {
+
+            float zoomLevel = (float) 15.0;
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng, zoomLevel));
+
+
+        marker = mMap.addMarker(new MarkerOptions().position(placeLatLng).title(name));
+
     }
 }
 
