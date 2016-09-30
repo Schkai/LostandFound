@@ -29,9 +29,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Marker marker;
     private LocationHelper mLocHelper;
-
-    // private TextView mPlaceDetailsText;
-    //private TextView mPlaceAttribution;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,18 +39,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         setUpSearchBar();
-/*
-        // Retrieve the PlaceAutocompleteFragment.
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-
-        // Register a listener to receive callbacks when a place has been selected or an error has
-        // occurred.
-        autocompleteFragment.setOnPlaceSelectedListener(this);
-        // Retrieve the TextViews that will display details about the selected place.
-        mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
-        mPlaceAttribution = (TextView) findViewById(R.id.place_attribution);
-*/
 
     }
 
@@ -81,7 +66,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 addressList = geocoder.getFromLocationName(input, 1);
 
             } catch (IOException e) {
-                // Toast.makeText(MapsActivity.this, "Address unknown", Toast.LENGTH_LONG).show();
 
                 e.printStackTrace();
             }
@@ -107,7 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void showLocationSetDialog(final String destination) {
-        //build dialog
+
         AlertDialog.Builder dialog = new AlertDialog.Builder(
                 MapsActivity.this);
         String Message = getString(R.string.mapsDialogMessage) + " " + destination + "?";
@@ -179,27 +163,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         marker = mMap.addMarker(new MarkerOptions().position(lastLoc).title("Your position?"));
 
     }
-/*
-    @Override
-    public void onPlaceSelected(Place place) {
-        Log.i("", "Place Selected: " + place.getName());
-
-        // Format the returned place's details and display them in the TextView.
-
-
-        CharSequence attributions = place.getAttributions();
-        if (!TextUtils.isEmpty(attributions)) {
-            mPlaceAttribution.setText(Html.fromHtml(attributions.toString()));
-        } else {
-            mPlaceAttribution.setText("");
-        }
-    }
-
-    @Override
-    public void onError(Status status) {
-
-    }
-*/
 
 
 }

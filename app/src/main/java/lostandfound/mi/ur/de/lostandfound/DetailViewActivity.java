@@ -54,8 +54,6 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         populateTextViews();
 
 
-
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.detail_map);
@@ -69,12 +67,12 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
 
     private void initTextViews() {
 
-       mNameTxt = (TextView) findViewById(R.id.name_detail_view);
-       mCategoryTxt = (TextView) findViewById(R.id.category_detail_view);
-       mDescriptionTxt = (TextView) findViewById(R.id.description_detail_view);
-       mDateTxt = (TextView) findViewById(R.id.date_detail_view);
-       mPlaceTxt = (TextView) findViewById(R.id.place_detail_view);
-       mContactTxt = (TextView) findViewById(R.id.contact_detail_view);
+        mNameTxt = (TextView) findViewById(R.id.name_detail_view);
+        mCategoryTxt = (TextView) findViewById(R.id.category_detail_view);
+        mDescriptionTxt = (TextView) findViewById(R.id.description_detail_view);
+        mDateTxt = (TextView) findViewById(R.id.date_detail_view);
+        mPlaceTxt = (TextView) findViewById(R.id.place_detail_view);
+        mContactTxt = (TextView) findViewById(R.id.contact_detail_view);
 
         Typeface face = Typeface.createFromAsset(getAssets(), "fonts/MavenPro-Medium.ttf");
 
@@ -91,19 +89,21 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
      * Gets intent from respective RecyclerView Entry
      */
 
-    private void getIntents(){
+    private void getIntents() {
         name = getIntent().getExtras().getString("itemName");
-        category  = getIntent().getExtras().getString("itemCategory");
+        category = getIntent().getExtras().getString("itemCategory");
         description = getIntent().getExtras().getString("itemDescription");
         date = getIntent().getExtras().getString("itemDate");
         contact = getIntent().getExtras().getString("itemContact");
-        double lat =getIntent().getExtras().getDouble("itemLatitude");
+        double lat = getIntent().getExtras().getDouble("itemLatitude");
         double lng = getIntent().getExtras().getDouble("itemLongitude");
 
-        placeLatLng= new LatLng(lat,lng);
-        place = mLocHelper.getAddressString(lat,lng);
-        String city=mLocHelper.getCityNameFromLatLng(lat, lng);
-        if (!Objects.equals(city, "")){place+=" ("+city+")";}
+        placeLatLng = new LatLng(lat, lng);
+        place = mLocHelper.getAddressString(lat, lng);
+        String city = mLocHelper.getCityNameFromLatLng(lat, lng);
+        if (!Objects.equals(city, "")) {
+            place += " (" + city + ")";
+        }
 
     }
 
@@ -122,18 +122,15 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     }
 
 
-
     private void checkPhoneNumber(CharSequence number) {
 
-        if(validMobileNumber((String) number)){
+        if (validMobileNumber((String) number)) {
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "nummer gefunden!", Snackbar.LENGTH_LONG);
             snackbar.show();
-        } else {
-
         }
     }
 
-    public boolean validMobileNumber(String number){
+    public boolean validMobileNumber(String number) {
         return Patterns.PHONE.matcher(number).matches();
     }
 
@@ -155,14 +152,15 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {mMap = googleMap;
-setupMarker();
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        setupMarker();
     }
 
     private void setupMarker() {
 
-            float zoomLevel = (float) 15.0;
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng, zoomLevel));
+        float zoomLevel = (float) 15.0;
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng, zoomLevel));
 
 
         marker = mMap.addMarker(new MarkerOptions().position(placeLatLng).title(name));

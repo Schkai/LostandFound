@@ -3,7 +3,7 @@ package lostandfound.mi.ur.de.lostandfound;
 /**
  * Created by Alexander on 28.08.2016.
  */
-public  class LostItem {
+public class LostItem {
     private String name;
     private String date;
     private double longitude;
@@ -13,26 +13,22 @@ public  class LostItem {
     private String description;
     private String postalCode;
     private String contact;
-    private int spamMarked;
 
 
-    public LostItem(String name, String date, double latitude, double longitude, String category, String description, String contact){
-        this.name=name;
-        this.date=date;
+    public LostItem(String name, String date, double latitude, double longitude, String category, String description, String contact) {
+        this.name = name;
+        this.date = date;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.category=category;
+        this.category = category;
         this.description = description;
         this.contact = contact;
-        postalCode ="";
-        spamMarked=0;
-
-
+        postalCode = "";
 
 
     }
 
-    public LostItem(){
+    public LostItem() {
     }
 
     public void setLongitude(double longitude) {
@@ -51,8 +47,13 @@ public  class LostItem {
         this.contact = contact;
     }
 
-    public void setDescription(String description){this.description = description;}
-    public String getDescription(){return description;}
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -69,18 +70,37 @@ public  class LostItem {
     public void setId(int id) {
         this.id = id;
     }
-    public void markAsSpam(){spamMarked++;}
 
-    public String getName() {return name;}
-    public String getDate() {return date;}
-    public double getLongitude() {return longitude;}
-    public double getLatitude() {return latitude;}
-    public String getCategory() {return category;}
-    public String getContact() {return contact;}
-    public String getPostalCode() {return postalCode;}
-    public int getId() {return id;}
-    public int getSpamMarked(){return spamMarked;}
+    public String getName() {
+        return name;
+    }
 
+    public String getDate() {
+        return date;
+    }
 
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public int getId() {
+        return id;
+    }
 
 }

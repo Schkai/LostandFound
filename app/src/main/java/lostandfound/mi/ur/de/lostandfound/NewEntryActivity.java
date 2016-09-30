@@ -151,7 +151,7 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             latitude = extras.getDouble("latitude");
@@ -300,14 +300,6 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
 
         switch (mi.getItemId()) {
             case android.R.id.home:
-                /*if (latitude != 0 && longitude != 0) {
-                    setResult(Activity.RESULT_OK,
-                            new Intent().putExtra("latitude", latitude).putExtra("longitude", longitude));
-                    finish();
-                } else {
-                    NavUtils.navigateUpFromSameTask(this);
-                }*/
-
                 onBackPressed();
                 return true;
             default:
@@ -338,7 +330,7 @@ public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnS
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             TextView tv = (TextView) getActivity().findViewById(R.id.input_date_edit);
             GregorianCalendar gregCal = new GregorianCalendar(year, month, dayOfMonth);
-            //Note: can we base the calendar on the location?
+
             DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY);
             String date = df.format(gregCal.getTime());
             tv.setText(date);

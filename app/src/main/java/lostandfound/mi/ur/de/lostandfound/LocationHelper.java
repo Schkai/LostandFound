@@ -36,7 +36,8 @@ public class LocationHelper {
         }
         return address;
     }
-    public String getPostalCodeFromLatLng(double lat, double lng){
+
+    public String getPostalCodeFromLatLng(double lat, double lng) {
         String postalCode = "unknown";
 
         List<Address> addresses = null;
@@ -56,7 +57,8 @@ public class LocationHelper {
         }
         return postalCode;
     }
-    public String getCityNameFromLatLng(double lat, double lng){
+
+    public String getCityNameFromLatLng(double lat, double lng) {
         String name = "";
 
         List<Address> addresses = null;

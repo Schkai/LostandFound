@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
      */
 
 
-
     /**
      * Builds a GoogleApiClient. Uses the addApi() method to request the LocationServices API.
      */
@@ -250,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             }
         }
     }
+
     /**
      * updates the fire base data and the location bar
      */
@@ -269,7 +269,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         if (!Objects.equals(city, "")) {
             locationText += " (" + locationHelper.getCityNameFromLatLng(theFindSpot.latitude, theFindSpot.longitude) + ")";
         }
-        if(Objects.equals(locationText, "Items near ")){locationText="Unknown location";}
+        if (Objects.equals(locationText, "Items near ")) {
+            locationText = "Unknown location";
+        }
 
         locationBar.setText(locationText);
     }
@@ -326,6 +328,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             mDate = (TextView) v.findViewById(R.id.date);
         }
     }
+
     private void getFireBaseData(RecyclerView recyclerView, final String refChild) {
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
