@@ -6,7 +6,9 @@
     tools:context="lostandfound.mi.ur.de.lostandfound.NewEntryActivity"
     android:orientation="vertical"
     >
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -169,7 +171,37 @@
             android:maxLines="3"
             android:imeOptions="actionDone"
             android:layout_marginBottom="20dp"/>
+        <android.lib.recaptcha.ReCaptcha
+            android:id="@+id/recaptcha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerInside" />
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/captcha_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:hint="@string/captcha_hint"
+                android:inputType="textPostalAddress"
+                android:maxLength="200" />
+
+
+            <Button
+                android:id="@+id/verify_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Go" />
+
+
+        </LinearLayout>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -183,7 +215,7 @@
             />
 
     </LinearLayout>
-
+</ScrollView>
 
 </android.support.design.widget.CoordinatorLayout>
 

@@ -5,9 +5,9 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.lib.recaptcha.ReCaptcha;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +34,7 @@ import java.util.Locale;
 /**
  * Created by Alexander on 31.08.2016.
  */
-public class NewEntryActivity extends AppCompatActivity {
+public class NewEntryActivity extends AppCompatActivity implements ReCaptcha.OnShowChallengeListener, ReCaptcha.OnVerifyAnswerListener {
 
     private Spinner lfSpinner;
     private Spinner categorySpinner;
@@ -42,31 +42,39 @@ public class NewEntryActivity extends AppCompatActivity {
     private LocationHelper locationHelper;
     private double latitude;
     private double longitude;
-
+    private static final String PUBLIC_KEY = "6LdSBQgUAAAAALoW1i3hecAq7RV2erkWf8mwfOo3";
+    private static final String PRIVATE_KEY = "6LdSBQgUAAAAAAo9kbNB8CCNgrWvpojlQNG02Utk";
 
     DatabaseReference db;
     Firebase ref = new Firebase("https://lostandfound-d91c9.firebaseio.com");
 
+    private ReCaptcha reCaptcha;
+    private boolean captchaSolved;
+    private EditText captchaInput;
+    private Button verify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
-        latitude = 0;
-        longitude = 0;
+        captchaSolved = false;
         locationHelper = new LocationHelper(this);
 
         initDateInputField();
         initPlaceInputField();
         initlfSpinner();
         initCategorySpinner();
-        //  initCategorySpinner();
+        initCaptcha();
         initPublishEntryButton();
         // back-button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //initialize fb
         db = FirebaseDatabase.getInstance().getReference();
+
+
+        showChallenge();
     }
+
 
     private void initCategorySpinner() {
         categorySpinner = (Spinner) findViewById(R.id.category_spinner);
@@ -171,28 +179,29 @@ public class NewEntryActivity extends AppCompatActivity {
         publishEntryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (captchaSolved) {
+
+                    if (String.valueOf(lfSpinner.getSelectedItem()) == "Lost") {
+
+                        String postalCode = locationHelper.getPostalCodeFromLatLng(latitude, longitude);
+
+                        Firebase newItem = ref.child("LostItem").child(postalCode.toString());
+                        newItem.push().setValue(createItemFromInput());
+
+                    } else {
+
+                        String postalCode = locationHelper.getPostalCodeFromLatLng(latitude, longitude);
+
+                        Firebase newItem = ref.child("FoundItem").child(postalCode.toString());
+                        newItem.push().setValue(createItemFromInput());
+
+                    }
 
 
-                if (String.valueOf(lfSpinner.getSelectedItem()) == "Lost") {
-
-                    String postalCode = locationHelper.getPostalCodeFromLatLng(latitude, longitude);
-
-                    Firebase newItem = ref.child("LostItem").child(postalCode.toString());
-                    newItem.push().setValue(createItemFromInput());
-
-                } else {
-
-                    String postalCode = locationHelper.getPostalCodeFromLatLng(latitude, longitude);
-
-                    Firebase newItem = ref.child("FoundItem").child(postalCode.toString());
-                    newItem.push().setValue(createItemFromInput());
-
-                }
-
-
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Item saved", Snackbar.LENGTH_LONG);
-                snackbar.show();
-                finish();
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Item saved", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    finish();
+                }else{Toast.makeText(NewEntryActivity.this, "Please enter the captcha code", Toast.LENGTH_SHORT).show();}
 
             }
         });
@@ -221,7 +230,7 @@ public class NewEntryActivity extends AppCompatActivity {
         //weil halt.
 
         if (name.equals("") || description.equals("")) {
-            Toast.makeText(this, "Please enter a name or a description for your item!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter a name and a description for your item!", Toast.LENGTH_SHORT).show();
         } else {
             item.setName(name);
             item.setDate(date);
@@ -268,7 +277,7 @@ public class NewEntryActivity extends AppCompatActivity {
                 } else {
                     NavUtils.navigateUpFromSameTask(this);
                 }*/
-                onBackPressed();
+
                 onBackPressed();
                 return true;
             default:
@@ -303,5 +312,57 @@ public class NewEntryActivity extends AppCompatActivity {
         }
     }
 
+    private void initCaptcha() {
+        reCaptcha = (ReCaptcha) findViewById(R.id.recaptcha);
+        reCaptcha.showChallengeAsync("your-public-key", this);
+
+        captchaInput = (EditText) findViewById(R.id.captcha_input);
+        verify = (Button) findViewById(R.id.verify_button);
+        verify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (captchaInput.getText().equals("")) {
+                    Toast.makeText(NewEntryActivity.this, "Please enter the upper code", Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    reCaptcha.verifyAnswerAsync(PRIVATE_KEY, captchaInput.getText().toString(), NewEntryActivity.this);
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onChallengeShown(boolean shown) {
+
+
+        if (shown) {
+
+            this.reCaptcha.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onAnswerVerified(boolean success) {
+        if (success) {
+            Toast.makeText(this, "Captcha solved", Toast.LENGTH_SHORT).show();
+            captchaSolved = true;
+            reCaptcha.setVisibility(View.INVISIBLE);
+            captchaInput.setVisibility(View.INVISIBLE);
+            verify.setVisibility(View.INVISIBLE);
+
+        } else {
+            Toast.makeText(this, "You entered the wrong code", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void showChallenge() {
+        this.reCaptcha.setVisibility(View.GONE);
+
+        this.reCaptcha.setLanguageCode("en");
+        this.reCaptcha.showChallengeAsync(PUBLIC_KEY, this);
+    }
 
 }
