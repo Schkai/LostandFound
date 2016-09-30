@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -110,20 +111,23 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                             protected void populateViewHolder(MessageViewHolder viewHolder, final LostItem model, final int position) {
                                 viewHolder.mText.setText(model.getName());
 
-                                if (model.getCategory().equals("Key")){
-                                    viewHolder.mCategory.setImageResource(R.drawable.key);
-                                } else if (model.getCategory().equals("Other")) {
-                                    viewHolder.mCategory.setImageResource(R.drawable.help);
-                                } else if(model.getCategory().equals("Wallet")) {
-                                    viewHolder.mCategory.setImageResource(R.drawable.briefcase);
-                                } else if(model.getCategory().equals("Card")){
-                                    viewHolder.mCategory.setImageResource(R.drawable.credit_card);
-                                } else if(model.getCategory().equals("Clothing")){
-                                    viewHolder.mCategory.setImageResource(R.drawable.tshirt_crew);
-                                } else if(model.getCategory().equals("Electronic Device")){
-                                    viewHolder.mCategory.setImageResource(R.drawable.cellphone);
-                                } else if(model.getCategory().equals("Jewelry")){
-                                    viewHolder.mCategory.setImageResource(R.drawable.anchor);
+                                String modelCategory = model.getCategory();
+
+                                switch (modelCategory) {
+                                    case "Key": viewHolder.mCategory.setImageResource(R.drawable.key);
+                                        break;
+                                    case "Other": viewHolder.mCategory.setImageResource(R.drawable.help);
+                                        break;
+                                    case "Wallet": viewHolder.mCategory.setImageResource(R.drawable.briefcase);
+                                        break;
+                                    case "Card": viewHolder.mCategory.setImageResource(R.drawable.credit_card);
+                                        break;
+                                    case "Clothing": viewHolder.mCategory.setImageResource(R.drawable.tshirt_crew);
+                                        break;
+                                    case "Electronic Device": viewHolder.mCategory.setImageResource(R.drawable.cellphone);
+                                        break;
+                                    case "Jewelry": viewHolder.mCategory.setImageResource(R.drawable.anchor);
+                                        break;
                                 }
 
                                 viewHolder.mLocation.setText(locationHelper.getAddressString(model.getLatitude(), model.getLongitude()));
