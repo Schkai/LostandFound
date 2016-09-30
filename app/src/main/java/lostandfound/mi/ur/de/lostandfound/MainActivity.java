@@ -41,7 +41,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private Button addEntryButton;
     private Button setLocButton;
 
-    public static final int MAP_REQUEST = 0;
+    public static final int DETAIL_REQUEST = 2;
+    public static final int MAP_REQUEST = 1;
+    public static final int NEW_ENTRY_REQUEST = 0;
     private static final String TAG = MainActivity.class.getSimpleName();
     protected TextView locationBar;
 
@@ -51,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private LatLng theFindSpot;
 
 
-    RecyclerView mRecyclerView;
-    private LinearLayoutManager mLinearLayoutManager;
     private LocationHelper locationHelper;
 
     //FIREBASE --------------
@@ -68,9 +68,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         Firebase.setAndroidContext(this);
         locationHelper= new LocationHelper(getApplicationContext());
+        initBars();
         buildGoogleApiClient();
         initButtons();
-        initBars();
 
         initLists();
         initTabs();
@@ -79,13 +79,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     }
         private void initBars () {
+            locationBar = (TextView) findViewById(R.id.textView);
             getSupportActionBar().hide();
 
         }
 
        private void getFireBaseData(RecyclerView recyclerView, final String refChild) {
 
-            locationBar = (TextView) findViewById(R.id.textView);
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
             String postalCode = "unknown";
              if (theFindSpot != null) {postalCode = locationHelper.getPostalCodeFromLatLng(theFindSpot.latitude, theFindSpot.longitude);
@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+
+
                                         Log.d("Tabbug", "You clicked on position " + position);
                                         Intent detailIntent = new Intent(view.getContext(), DetailViewActivity.class);
                                         detailIntent.putExtra("itemName", model.getName());
@@ -117,7 +119,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                                         detailIntent.putExtra("itemDate", model.getDate());
                                         detailIntent.putExtra("itemLatitude", model.getLatitude());
                                         detailIntent.putExtra("itemLongitude", model.getLongitude());
-                                        startActivity(detailIntent);
+                                        detailIntent.putExtra("last_loc", theFindSpot);
+                                        startActivityForResult(detailIntent,DETAIL_REQUEST);
                                     }
                                 });
 
@@ -167,13 +170,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         if (theFindSpot != null) {
             i.putExtra("last_loc", theFindSpot);
         } else {
-            /*LatLng defaultLatLng = new LatLng(0, 0);
-            i.putExtra("last_loc", defaultLatLng);*/
+
             locationUnknown = true;
         }
         i.putExtra("loc_unknown", locationUnknown);
 
-        startActivityForResult(i, 1);
+        startActivityForResult(i, MAP_REQUEST);
     }
 
     /**
@@ -187,8 +189,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         if (theFindSpot != null) {
             i.putExtra("last_loc", theFindSpot);
         } else {
-            /*LatLng defaultLatLng = new LatLng(0, 0);
-            i.putExtra("last_loc", defaultLatLng);*/
+
             locationUnknown = true;
         }
         i.putExtra("loc_unknown", locationUnknown);
@@ -196,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
 
-        startActivity(i);
+        startActivityForResult(i,NEW_ENTRY_REQUEST);
     }
 
     private void initTabs() {

@@ -1,12 +1,16 @@
 package lostandfound.mi.ur.de.lostandfound;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-
 import android.util.Patterns;
+import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by Konstantin on 29.09.2016.
@@ -94,6 +98,20 @@ public class DetailViewActivity extends AppCompatActivity {
         return Patterns.PHONE.matcher(number).matches();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem mi) {
 
+        switch (mi.getItemId()) {
+            case android.R.id.home:
+                LatLng loc = getIntent().getExtras().getParcelable("last_loc");
+                    setResult(Activity.RESULT_OK,
+                            new Intent().putExtra("latitude", loc.latitude).putExtra("longitude", loc.longitude));
+                    finish();
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(mi);
+        }
+    }
 }
 

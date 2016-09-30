@@ -52,7 +52,8 @@ public class NewEntryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
-
+        latitude = 0;
+        longitude = 0;
         locationHelper = new LocationHelper(this);
 
         initDateInputField();
@@ -119,12 +120,11 @@ public class NewEntryActivity extends AppCompatActivity {
             lastLoc = getIntent().getExtras().getParcelable("last_loc");
             String address = locationHelper.getAddressString(lastLoc.latitude, lastLoc.longitude);
             placeEdit.setText("near " + address);
-            latitude=lastLoc.latitude;
-            longitude=lastLoc.longitude;
+            latitude = lastLoc.latitude;
+            longitude = lastLoc.longitude;
         }
 
     }
-
 
 
     @Override
@@ -162,8 +162,8 @@ public class NewEntryActivity extends AppCompatActivity {
 
 
     /**
-     *  DO NOT (!!!) delete the .toString() in the child query even though android studio won't shut up about it being redundant!
-     *  Just don't do it! It will fuck up the whole database!
+     * DO NOT (!!!) delete the .toString() in the child query even though android studio won't shut up about it being redundant!
+     * Just don't do it! It will fuck up the whole database!
      */
 
     private void initPublishEntryButton() {
@@ -192,7 +192,7 @@ public class NewEntryActivity extends AppCompatActivity {
 
                 Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Item saved", Snackbar.LENGTH_LONG);
                 snackbar.show();
-             //   Toast.makeText(NewEntryActivity.this, "Item saved!", Toast.LENGTH_LONG).show();
+                //   Toast.makeText(NewEntryActivity.this, "Item saved!", Toast.LENGTH_LONG).show();
                 finish();
 
             }
@@ -221,7 +221,7 @@ public class NewEntryActivity extends AppCompatActivity {
         //warum setzen wir die Werte ein 2. mal? /Alex
         //weil halt.
 
-        if (name.equals("") || description.equals ("")) {
+        if (name.equals("") || description.equals("")) {
             Toast.makeText(this, "Please enter a name or a description for your item!", Toast.LENGTH_SHORT).show();
         } else {
             item.setName(name);
@@ -230,7 +230,7 @@ public class NewEntryActivity extends AppCompatActivity {
             item.setLongitude(longitude);
             item.setCategory(category);
             item.setDescription(description);
-            item.setPostalCode(locationHelper.getPostalCodeFromLatLng(item.getLatitude(),item.getLongitude()));
+            item.setPostalCode(locationHelper.getPostalCodeFromLatLng(item.getLatitude(), item.getLongitude()));
             item.setContact(contact);
 
             return item;
@@ -259,14 +259,22 @@ public class NewEntryActivity extends AppCompatActivity {
     //backButton
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
+
         switch (mi.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                if (latitude != 0 && longitude != 0) {
+                    setResult(Activity.RESULT_OK,
+                            new Intent().putExtra("latitude", latitude).putExtra("longitude", longitude));
+                    finish();
+                } else {
+                    NavUtils.navigateUpFromSameTask(this);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(mi);
         }
     }
+
 
     //DateDialogue
     public static class DatePickFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
