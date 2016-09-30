@@ -15,7 +15,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="124dp"
+            android:layout_width="98dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Name"
@@ -26,6 +26,11 @@
             android:layout_margin="20dp"
             />
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/divider_line"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,7 +39,6 @@
             android:id="@+id/name_detail_view"
             android:elegantTextHeight="false"
             android:textStyle="bold"
-
             android:layout_margin="20dp"/>
 
 
@@ -46,7 +50,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="98dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Category"
@@ -54,8 +58,12 @@
             android:elegantTextHeight="false"
             android:textStyle="bold"
             android:textAllCaps="true"
-            android:layout_margin="20dp"
-            android:layout_weight="1" />
+            android:layout_margin="20dp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/divider_line"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -77,24 +85,26 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="98dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Description"
-            android:maxLines="1"
             android:id="@+id/description_detail_view_label"
             android:elegantTextHeight="false"
             android:textStyle="bold"
             android:textAllCaps="true"
-            android:layout_margin="20dp"
-            android:layout_weight="1" />
+            android:layout_margin="20dp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/divider_line"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Description"
-            android:maxLines="1"
             android:id="@+id/description_detail_view"
             android:elegantTextHeight="false"
             android:textStyle="bold"
@@ -109,7 +119,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="98dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/input_date"
@@ -117,8 +127,12 @@
             android:elegantTextHeight="false"
             android:textStyle="bold"
             android:textAllCaps="true"
-            android:layout_margin="20dp"
-            android:layout_weight="1" />
+            android:layout_margin="20dp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/divider_line"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -139,7 +153,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="98dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/input_place"
@@ -147,8 +161,12 @@
             android:elegantTextHeight="false"
             android:textStyle="bold"
             android:textAllCaps="true"
-            android:layout_margin="20dp"
-            android:layout_weight="1" />
+            android:layout_margin="20dp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/divider_line"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -169,7 +187,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="98dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/input_contact"
@@ -177,8 +195,12 @@
             android:elegantTextHeight="false"
             android:textStyle="bold"
             android:textAllCaps="true"
-            android:layout_margin="20dp"
-            android:layout_weight="1" />
+            android:layout_margin="20dp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/divider_line"/>
 
         <TextView
             android:layout_width="match_parent"
